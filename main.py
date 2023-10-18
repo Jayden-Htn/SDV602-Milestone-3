@@ -246,7 +246,6 @@ def main():
     while True:
         # Get events from all active windows
         window, event, values = psg.read_all_windows()
-
         # Handle any window 1 events
         if window == window_1:
             # Close program on exit

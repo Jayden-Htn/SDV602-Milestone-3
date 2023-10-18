@@ -11,7 +11,7 @@ How to run the game:
 
 1. Download the repository and open in VS Code.
 2. Run `python -m venv venv` to install a virtual environment if you do not already have one set up.
-3. Run `source venv/Scripts/activate` in the terminal to start the virtual environment.
+3. Run `source venv/Scripts/activate` in the terminal to start the virtual environment if it is not active.
 4. Run `pip install -r requirements.txt` in the terminal to install dependancies.
 5. Run the main.py script.
 
