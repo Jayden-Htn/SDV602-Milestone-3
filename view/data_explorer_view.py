@@ -1,7 +1,7 @@
 import sys
 sys.dont_write_bytecode = True
 from typing import Dict
-import view.ChartExamples as ce 
+import view.chart_examples as ce 
 import controller.DES.exit_button as exit_button
 import controller.DES.figure_list_select as figure_list_select
 import controller.DES.new_des as new_des
