@@ -16,14 +16,6 @@ import PySimpleGUI as sg
 import inspect
 
 import view.chart_examples as ce 
-import controller.DES.exit_button as exit_button
-import controller.DES.figure_list_select as figure_list_select
-import controller.DES.new_des as new_des
-import controller.DES.open_csv as open_csv
-import controller.DES.login_page as login_page
-import controller.DES.register_page as register_page
-import controller.DES.login_button as login_button
-import controller.DES.register_button as register_button
 import view.layouts as layouts
 
 
