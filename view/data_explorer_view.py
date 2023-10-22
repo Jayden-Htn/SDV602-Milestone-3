@@ -1,35 +1,47 @@
+"""
+This file contains the view for the data explorer screen, sets up the layout and creates the window controls.
+"""
+
+
+# Imports
 import sys
 sys.dont_write_bytecode = True
 from typing import Dict
+import numpy as np
+import matplotlib
+matplotlib.use('TkAgg')
+import matplotlib.pyplot as plt
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+import PySimpleGUI as sg
+import inspect
+
 import view.chart_examples as ce 
 import controller.DES.exit_button as exit_button
 import controller.DES.figure_list_select as figure_list_select
 import controller.DES.new_des as new_des
 import controller.DES.open_csv as open_csv
-import PySimpleGUI as sg
-import inspect
-import matplotlib
-matplotlib.use('TkAgg')
-from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+import controller.DES.login_page as login_page
+import controller.DES.register_page as register_page
+import controller.DES.login_button as login_button
+import controller.DES.register_button as register_button
+import view.layouts as layouts
 
-import numpy as np
-import matplotlib.pyplot as plt
 
+# Procedures
 class DES_View(object):
     des_list = [] # change to a dict, store window instance and and class instance
     def __init__(self):
         self.window = None
         self.figure_agg = None
-        self.layout = []
+        self.current_layout = []
         self.components = {"has_components":False}
         self.controls = []
         self.my_lastfig = None
-        self.fig_dict = {'Line Plot':(ce.line_plot,{}),'Plot Dots(discrete plot)':(ce.discrete_plot,{}),
-    'Name and Label':(ce.names_labels,{}),'Plot many Lines':(ce.multiple_plots,{}),
-    'Bar Chart':(ce.bar_chart,{}),'Histogram':(ce.histogram,{'title':'Our Histogram Name'}),
-    'Scatter Plots':(ce.scatter_plots,{}),'Stack Plot':(ce.stack_plot,{}),
-    'Pie Chart 1':(ce.pie_chart1,{}),
-    'Pie Chart 2':(ce.pie_chart2,{})}
+        self.fig_dict = {'Line Plot': (ce.line_plot,{}), 'Plot Dots(discrete plot)': (ce.discrete_plot,{}),
+                         'Name and Label': (ce.names_labels,{}), 'Plot many Lines': (ce.multiple_plots,{}),
+                         'Bar Chart': (ce.bar_chart,{}), 'Histogram': (ce.histogram,{'title':'Our Histogram Name'}),
+                         'Scatter Plots': (ce.scatter_plots,{}), 'Stack Plot': (ce.stack_plot,{}),
+                         'Pie Chart 1': (ce.pie_chart1,{}), 'Pie Chart 2': (ce.pie_chart2,{})}
         DES_View.des_list += [self] # add to list of des objects
         # print(f"DES_View.des_list {DES_View.des_list}")
 
@@ -65,15 +77,14 @@ class DES_View(object):
         figure_canvas_agg.get_tk_widget().pack(side='top', fill='both', expand=1)
         return figure_canvas_agg
 
+
     def delete_figure_agg(self,figure_agg):
-        
         if self.figure_agg:
             self.figure_agg.get_tk_widget().forget()
         plt.close('all')
 
 
     def figure_list_draw(self,values):
-        
         if self.have_selected_graph(values) :
             choice = values['-LISTBOX-'][0]                 # get first listbox item chosen (returned as a list)
             func_tuple = self.fig_dict[choice]                         # get function to call from the dictionary
@@ -97,64 +108,52 @@ class DES_View(object):
             self.figure_agg = self.draw_figure(self.window['-CANVAS-'].TKCanvas, fig)  # draw the figure
     
 
-    def set_up_layout(self,**kwargs):
+    def set_up_layout(self, type):
         sg.theme('LightGreen')
-        figure_w, figure_h = 650, 650
-        # define the form layout
-        listbox_values = list(self.fig_dict)
-        # print(f"GOT List box {listbox_values}")
-        # one variable per call to sg 
-        # if there is a control / input with it add the name to the controls list
-        self.components['figures_list'] =  sg.Listbox(values=listbox_values, enable_events=True, size=(28, len(listbox_values)), key='-LISTBOX-')
-        self.controls += [figure_list_select.accept]
-
-        self.components['text_spacer'] = sg.Text(' ' * 12)
-        self.components['new_des'] = sg.Button(button_text="New DES",size=(10, 2))
-        self.controls += [new_des.accept]
-        self.components['data_file_name'] = sg.Text('No data')
-        self.components['select_file'] = sg.Button(button_text="Open CSV",size=(10, 2))
-        self.controls += [open_csv.accept]
-
-        self.components['exit_button'] = sg.Exit(size=(5, 2))        
-        self.controls += [exit_button.accept]
-
-        col_listbox = [
-                        [self.components['figures_list']],
-                        [self.components['text_spacer'],self.components['new_des'],self.components['select_file'],self.components['exit_button'] ]
-                    ]
-        self.components['header'] =   sg.Text('Matplotlib Plot Test', font=('current 18'))
-        self.components['list_box_padding'] =  sg.Col(col_listbox, pad=(5, (3, 330))) 
-        self.components['canvas']   =   sg.Canvas(size=(figure_w, figure_h), key='-CANVAS-') 
-        self.components['MLine']    =  sg.MLine(size=(70, 35), pad=(5, (3, 90)), key='-MULTILINE-')   
-        self.layout = [
-                        [self.components['header']],[self.components['data_file_name']],
-                        [self.components['list_box_padding'],self.components['canvas'],
-                        self.components['MLine']]
-                    ]
+        if type == 'main':
+            self.current_layout = layouts.main_layout(self)
+            print("main layout set")
+        elif type == 'des':
+           self.current_layout = layouts.des_layout(self)
+        else:
+           print("Error: Unknown layout type")
+        
+    
+    def change_layout(view, layout_name):
+        if layout_name == 'home':
+            layouts.home_layout(view)
+        elif layout_name == 'login':
+            layouts.login_layout(view)
+        elif layout_name == 'register':
+            layouts.register_layout(view)
+        else:
+            layouts.welcome_layout(view)
 
 
     def render(self):
         # create the form and show it without the plot
-        if self.layout != [] :
-            self.window =sg.Window('Our Demo Application with - Embedding Matplotlib In PySimpleGUI with **kwargs', self.layout, grab_anywhere=False, finalize=True)
+        if self.current_layout != [] :
+            self.window = sg.Window('Data Scout: Data Set Explorer', self.current_layout, size=(700, 400), finalize=True)
             
 
     # class static method, level reading
     def accept_input():
-        keep_going = True        
+        keep_going = True  
+        active_view = None     
         while keep_going:
-            # print("looping")
             window, event, values = sg.read_all_windows()
-            # print(window)
             # Find class from window
-            for item in DES_View.des_list:
-                if item.window == window:
-                    view = item
+            for view in DES_View.des_list:
+                if view.window == window:
+                    active_view = view
             # Check for window close
             if event == sg.WIN_CLOSED or event == 'Exit':
-                  keep_going = False
-                  window.close()
-            for accept_control in view.controls:
-                keep_going = accept_control(event, values, {'view':view})
-                # print(keep_going, window, accept_control)
+                    keep_going = False
+            for accept_control in active_view.controls:
+                # Determine loop and handle event
+                keep_going = accept_control(event, values, active_view)            
+            if active_view != None:
+                active_view.window.refresh()
+
+            
        
