@@ -74,11 +74,11 @@ def main_layout(view):
     view.components['title'] = sg.Text('Data Scout: Data Set Explorer', font='Any 28', size=(700,1), justification='center')
     view.components['page_name'] = sg.Text('Register', font='Any 18', justification='right', pad=(0,(0,20)))
     view.components['name_text'] = sg.Text('Name', size=(8,1), justification='right')
-    view.components['name_input'] = sg.Input(size=(25,1))
+    view.components['name_input'] = sg.Input(size=(25,1), key='-NAME-')
     view.components['email_text'] = sg.Text('Email', size=(8,1), justification='right')
-    view.components['email_input'] = sg.Input(size=(25,1))
+    view.components['email_input'] = sg.Input(size=(25,1), key='-EMAIL_2-')
     view.components['password_text'] = sg.Text('Password', size=(8,1), justification='right')
-    view.components['password_input'] = sg.Input(size=(25,1))
+    view.components['password_input'] = sg.Input(size=(25,1), key='-PASSWORD_2-')
     view.components['register_button'] = sg.Button('Register', key='-REGISTER_BUTTON-', size=(15,1), pad=(0,(20,0)))
     view.components['back_button'] = sg.Button('Back', key='-BACK_BUTTON_2-', size=(15,1))
     view.controls += [register_button.accept]
@@ -110,7 +110,7 @@ def main_layout(view):
     view.components['des_list'] = sg.Frame(title='Other DES', layout=des_container, size=(184, 140), 
                                            title_color='#2D6A4F', background_color='#95D0B3')
     view.components['other_des'] = sg.Button('Other DES', key='-OTHER_DES-', size=(15,1))
-    view.components['exit_button'] = sg.Button('Exit', key='-EXIT-', size=(15,1))
+    view.components['exit_button'] = sg.Button('Exit', key='-EXIT_2-', size=(15,1))
     view.controls += [new_des.accept]
     view.controls += [exit_button.accept]
 

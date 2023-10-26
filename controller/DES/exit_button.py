@@ -8,7 +8,7 @@ import PySimpleGUI as sg
 
 def accept(event, values, state):
     keep_going = True
-    if event in (sg.WIN_CLOSED, '-EXIT-'):   
+    if event in (sg.WIN_CLOSED, '-EXIT-', '-EXIT_2-'):   
         keep_going = False
         
         # this bit is a thought #

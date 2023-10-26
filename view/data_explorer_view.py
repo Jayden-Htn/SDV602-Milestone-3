@@ -134,7 +134,9 @@ class DES_View(object):
         keep_going = True  
         active_view = None     
         while keep_going:
+            print("----- New Loop -----")
             window, event, values = sg.read_all_windows()
+            print("event: ", event)
             # Find class from window
             for view in DES_View.des_list:
                 if view.window == window:
