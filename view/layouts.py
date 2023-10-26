@@ -105,7 +105,7 @@ def main_layout(view):
     ]
 
     view.components['title'] = sg.Text('Data Scout: Data Set Explorer', font='Any 28', size=(700,1), justification='center')
-    view.components['page_name'] = sg.Text('Welcome User', font='Any 18', justification='right', pad=(0,(0,20)))
+    view.components['page_name'] = sg.Text('Welcome User', font='Any 18', justification='right', pad=(0,(0,20)), key='-PAGE_NAME-')
     view.components['my_des'] = sg.Button('My DES', key='-MY_DES-', size=(15,1))
     view.components['des_list'] = sg.Frame(title='Other DES', layout=des_container, size=(184, 140), 
                                            title_color='#2D6A4F', background_color='#95D0B3')

@@ -14,9 +14,12 @@ def accept(event, values, instance):
         if accounts_exists:
             # Add current user
             view.DES_View.user = accounts.get_display_name(values['-EMAIL-'])
+            print("email: ", values['-EMAIL-'], "name: ", view.DES_View.user)
             # Switch screen
-            instance.window[f'-COL_LOGIN-'].update(visible=False)
-            instance.window[f'-COL_HOME-'].update(visible=True)
+            instance.window['-COL_LOGIN-'].update(visible=False)
+            instance.window['-COL_HOME-'].update(visible=True)
+            # Update name on home screen
+            instance.window['-PAGE_NAME-'].update(f'Welcome, {view.DES_View.user}!')
         else:
             sg.Popup('Login failed. Incorrect email or password.')
     return keep_going
