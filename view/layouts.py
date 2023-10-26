@@ -48,9 +48,9 @@ def main_layout(view):
     view.components['title'] = sg.Text('Data Scout: Data Set Explorer', font='Any 28', size=(700,1), justification='center')
     view.components['page_name'] = sg.Text('Login', font='Any 18', justification='right', pad=(0,(0,20)))
     view.components['email_text'] = sg.Text('Email', size=(8,1), justification='right')
-    view.components['email_input'] = sg.Input(size=(25,1))
+    view.components['email_input'] = sg.Input(size=(25,1), key='-EMAIL-')
     view.components['password_text'] = sg.Text('Password', size=(8,1), justification='right')
-    view.components['password_input'] = sg.Input(size=(25,1))
+    view.components['password_input'] = sg.Input(size=(25,1), key='-PASSWORD-')
     view.components['login_button'] = sg.Button('Login', size=(15,1), key='-LOGIN_BUTTON-', pad=(0,(20,0)))
     view.components['back_button'] = sg.Button('Back', key='-BACK_BUTTON-', size=(15,1))
     view.controls += [login_button.accept]

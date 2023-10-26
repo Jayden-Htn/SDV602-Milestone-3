@@ -3,7 +3,6 @@ Login page button controller
 """
 import sys
 sys.dont_write_bytecode = True
-import view.data_explorer_view as view
 
 def accept(event, values, instance):
     print('login_page.py: accept()', event)

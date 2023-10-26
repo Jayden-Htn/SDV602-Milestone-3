@@ -22,6 +22,7 @@ import view.layouts as layouts
 # Procedures
 class DES_View(object):
     des_list = [] # change to a dict, store window instance and and class instance
+    user = None
     def __init__(self):
         self.window = None
         self.figure_agg = None

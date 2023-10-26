@@ -2,7 +2,7 @@
     This module contains the functions that handle the accounts.
 
     Functions:
-        verify_correct_account(email, password): This function checks if the account exists with the correct password.
+        verify_account(email, password): This function checks if the account exists with the correct password.
         check_for_item(item, item_type): This function checks if the item exists in the csv file (e.g. username, email).
         get_display_name(): This function gets the display name of the account.
         add_account(name, email, password): This function adds an account to the csv file.
@@ -10,16 +10,12 @@
 """
 
 
-# Import modules
-import account_manager.file_handler as files
-
-# Global variables
-global username
-username = None
+# Imports
+import model.data.database_reader as files
 
 
-# Functions
-def verify_correct_account(email, password):
+# Procedures
+def verify_account(email, password):
     """
         This function checks if the account exists with the correct password.
 
@@ -30,15 +26,12 @@ def verify_correct_account(email, password):
         Returns:
             Exists (bool): If the account exists or not.
     """
-    global username
-
     # Retrieve the data from the csv file
     data = files.read_csv_file()
     
     # Check if the account exists
     for account in data:
         if account[1] == email and account[2] == password:
-            username = account[0] # Set the username of the active account
             return True
     return False
 
@@ -72,15 +65,20 @@ def check_for_item(item, item_type):
     return False
 
 
-def get_display_name():
+def get_display_name(email):
     """
         This function gets the display name of the account.
+
+        Parameters:
+            email (str): The email of the account.
 
         Returns:
             display_name (str): The display name of the account.
     """
-    global username
-    return username
+    data = files.read_csv_file()
+    for name, email, password in data:
+        if email == email:
+            return name
 
 
 def add_account(name, email, password):
