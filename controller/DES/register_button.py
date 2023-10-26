@@ -11,10 +11,12 @@ import view.data_explorer_view as view
 def accept(event, values, instance):
     keep_going = True
     if event == '-REGISTER_BUTTON-':
-        accounts_exists = accounts.check_for_item('email', values['-EMAIL_2-'])
-        accounts_exists_2 = accounts.check_for_item('name', values['-NAME-'])
+        email_exists = accounts.check_for_item(values['-EMAIL_2-'], 'email')
+        print("email_exists: ", email_exists)
+        name_exists = accounts.check_for_item(values['-NAME-'], 'name')
+        print("name_exists: ", name_exists)
         print("values: ", values)
-        if not accounts_exists and not accounts_exists_2:
+        if not email_exists and not name_exists:
             # Add account
             accounts.add_account(values['-NAME-'], values['-EMAIL_2-'], values['-PASSWORD_2-'])
             # Add current user
@@ -23,6 +25,8 @@ def accept(event, values, instance):
             # Switch screen
             instance.window[f'-COL_REGISTER-'].update(visible=False)
             instance.window[f'-COL_HOME-'].update(visible=True)
-        else:
-            sg.Popup('Login failed. Email or name already in use.')
+        elif email_exists:
+            sg.Popup('Register failed. Email already in use.')
+        elif name_exists:
+            sg.Popup('Register failed. Name already in use.')
     return keep_going
