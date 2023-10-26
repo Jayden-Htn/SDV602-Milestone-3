@@ -37,7 +37,6 @@ class DES_View(object):
                          'Scatter Plots': (ce.scatter_plots,{}), 'Stack Plot': (ce.stack_plot,{}),
                          'Pie Chart 1': (ce.pie_chart1,{}), 'Pie Chart 2': (ce.pie_chart2,{})}
         DES_View.des_list += [self] # add to list of des objects
-        # print(f"DES_View.des_list {DES_View.des_list}")
 
 
     def have_selected_graph(self,values):
@@ -116,25 +115,13 @@ class DES_View(object):
 
     def load_home_page(instance):
         window = instance.window
+        # Update name on home screen
         window['-PAGE_NAME-'].update(f'Welcome, {instance.user}!')
+        # Update DES dropdown
+        des_list = accounts.get_other_names(instance.user)
+        window['-DES_DROPDOWN-'].update(values=des_list)
+        window['-DES_DROPDOWN-'].update(value='Select a DES')
 
-        # Get all DES names except the user's
-        des_list = accounts.get_other_names(instance.user) 
-
-        # Placeholder text if no DES screens available
-        if len(des_list) == 0:
-            window.extend_layout(
-                window['-DES_COL-'], [[sg.Text('No DES screens available.')]]
-            )
-            
-        # Add DES buttons to the list
-        else:
-            for des in des_list:
-                window.extend_layout(
-                    window['-DES_COL-'], 
-                    [[sg.Button(des, key=f'-BTN_HOME_DES_{des}-', size=(15,1))]]
-                )
-    
 
     def render(self):
         # create the form and show it without the plot
