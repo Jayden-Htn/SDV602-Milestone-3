@@ -101,13 +101,15 @@ def main_layout(view):
 
     # Home screen layout
     des_container = [
-        [sg.Column([], key='-DES_COL-', scrollable=True, vertical_scroll_only=True, size=(180, 120))]
+        [sg.Column([], key='-DES_COL-', scrollable=True, vertical_scroll_only=True, size=(170, 120))]
     ]
 
-    view.components['title'] = sg.Text('Data Scout: Data Set Explorer', font='Any 28', size=(700,1), justification='center')
-    view.components['page_name'] = sg.Text('Welcome User', font='Any 18', justification='right', pad=(0,(0,20)), key='-PAGE_NAME-')
+    view.components['title'] = sg.Text('Data Scout: Data Set Explorer', font='Any 28', 
+                                       size=(700,1), justification='center')
+    view.components['page_name'] = sg.Text('Welcome User', font='Any 18', justification='right', 
+                                           pad=(0,(0,20)), key='-PAGE_NAME-')
     view.components['my_des'] = sg.Button('My DES', key='-MY_DES-', size=(15,1))
-    view.components['des_list'] = sg.Frame(title='Other DES', layout=des_container, size=(184, 140), 
+    view.components['des_list'] = sg.Frame(title='Other DES', layout=des_container, size=(170, 140), 
                                            title_color='#2D6A4F', background_color='#95D0B3')
     view.components['other_des'] = sg.Button('Other DES', key='-OTHER_DES-', size=(15,1))
     view.components['exit_button'] = sg.Button('Exit', key='-EXIT_2-', size=(15,1))
@@ -119,6 +121,8 @@ def main_layout(view):
             layout=[
                 [view.components['title']],
                 [view.components['page_name']],
+                [view.components['my_des']],
+                [view.components['des_list']],
                 [view.components['exit_button']],
             ],
             element_justification='center'

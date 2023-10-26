@@ -17,6 +17,7 @@ import inspect
 
 import view.chart_examples as ce 
 import view.layouts as layouts
+import model.data.accounts as accounts
 
 
 # Procedures
@@ -38,12 +39,15 @@ class DES_View(object):
         DES_View.des_list += [self] # add to list of des objects
         # print(f"DES_View.des_list {DES_View.des_list}")
 
+
     def have_selected_graph(self,values):
         return len(values['-LISTBOX-']) > 0
   
+
     def update_component_text(self,component_name, text):
         if component_name in self.components:
             self.components[component_name].update(text)
+
 
     def update_current_data(self,values,file_name=None, **kwargs):
         if self.have_selected_graph(values) : 
@@ -92,7 +96,6 @@ class DES_View(object):
             # ** IMPORTANT ** Clean up previous drawing before drawing again
             self.delete_figure_agg(self.figure_agg)
 
-
             the_file_name = "No Data"
             if 'file_name' in kwargs:
                 the_file_name = kwargs['file_name']
@@ -105,23 +108,33 @@ class DES_View(object):
         sg.theme('LightGreen')
         if type == 'main':
             self.current_layout = layouts.main_layout(self)
-            print("main layout set")
         elif type == 'des':
            self.current_layout = layouts.des_layout(self)
         else:
            print("Error: Unknown layout type")
-        
-    
-    def change_layout(view, layout_name):
-        if layout_name == 'home':
-            layouts.home_layout(view)
-        elif layout_name == 'login':
-            layouts.login_layout(view)
-        elif layout_name == 'register':
-            layouts.register_layout(view)
-        else:
-            layouts.welcome_layout(view)
 
+
+    def load_home_page(instance):
+        window = instance.window
+        window['-PAGE_NAME-'].update(f'Welcome, {instance.user}!')
+
+        # Get all DES names except the user's
+        des_list = accounts.get_other_names(instance.user) 
+
+        # Placeholder text if no DES screens available
+        if len(des_list) == 0:
+            window.extend_layout(
+                window['-DES_COL-'], [[sg.Text('No DES screens available.')]]
+            )
+            
+        # Add DES buttons to the list
+        else:
+            for des in des_list:
+                window.extend_layout(
+                    window['-DES_COL-'], 
+                    [[sg.Button(des, key=f'-BTN_HOME_DES_{des}-', size=(15,1))]]
+                )
+    
 
     def render(self):
         # create the form and show it without the plot
@@ -134,9 +147,9 @@ class DES_View(object):
         keep_going = True  
         active_view = None     
         while keep_going:
-            print("----- New Loop -----")
+            # print("----- New Loop -----")
             window, event, values = sg.read_all_windows()
-            print("event: ", event)
+            # print("event: ", event)
             # Find class from window
             for view in DES_View.des_list:
                 if view.window == window:

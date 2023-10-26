@@ -22,7 +22,7 @@ def accept(event, values, instance):
             instance.window['-COL_REGISTER-'].update(visible=False)
             instance.window['-COL_HOME-'].update(visible=True)
             # Update name on home screen
-            instance.window['-PAGE_NAME-'].update(f'Welcome, {view.DES_View.user}!')
+            view.DES_View.load_home_page(instance)
         elif email_exists:
             sg.Popup('Register failed. Email already in use.')
         elif name_exists:

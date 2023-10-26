@@ -108,3 +108,20 @@ def get_account_names():
     data = files.read_csv_file()
     names = [account[0] for account in data]
     return names
+
+
+def get_other_names(name):
+    """
+        This function gets the names of the other accounts.
+
+        Parameters:
+            name (str): The username of the active account.
+
+        Returns:
+            names (list): The names of the other accounts.
+    """
+    # Get the names of the accounts
+    names = get_account_names()
+    # Remove the active account as it is displayed separately from the other accounts
+    names.remove(name)
+    return names
