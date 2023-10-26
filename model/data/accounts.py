@@ -65,7 +65,7 @@ def check_for_item(item, item_type):
     return False
 
 
-def get_display_name(email):
+def get_display_name(user_email):
     """
         This function gets the display name of the account.
 
@@ -77,7 +77,7 @@ def get_display_name(email):
     """
     data = files.read_csv_file()
     for name, email, password in data:
-        if email == email:
+        if email == user_email:
             return name
 
 
