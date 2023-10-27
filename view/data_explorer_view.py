@@ -103,8 +103,24 @@ class DES_View(object):
             self.figure_agg = self.draw_figure(self.window['-CANVAS-'].TKCanvas, fig)  # draw the figure
     
 
+    def set_theme():
+        """
+        This function sets the default PySimpleGUI theme for the program.
+        """
+        sg.SetOptions(
+            background_color='#95D0B3', 
+            text_element_background_color='#95D0B3',
+            text_color="#2D6A4F",
+            font='Any 12',
+            element_background_color='#D0E9DD',
+            input_elements_background_color='#F7F3EC',
+            button_color=('white','#2D6A4F'),
+            titlebar_background_color='red',
+            titlebar_text_color='black'
+        )
+
+
     def set_up_layout(self, type):
-        sg.theme('LightGreen')
         if type == 'main':
             self.current_layout = layouts.main_layout(self)
         elif type == 'des':

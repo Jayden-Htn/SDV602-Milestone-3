@@ -17,6 +17,7 @@ if __name__ == "__main__" :
     """
         Code that runs when this is the main module.
     """
+    DES_View.set_theme()
     des_obj = DES_View()
     des_obj.set_up_layout('main')
     des_obj.render()
