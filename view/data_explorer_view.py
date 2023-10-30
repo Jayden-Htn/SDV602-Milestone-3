@@ -16,7 +16,8 @@ import PySimpleGUI as sg
 import inspect
 
 import view.chart_examples as ce 
-import view.layouts as layouts
+from view.layout_menu import layout as layout_menu
+from view.layout_des import layout as layout_des
 import model.data.accounts as accounts
 
 
@@ -122,9 +123,9 @@ class DES_View(object):
 
     def set_up_layout(self, type):
         if type == 'main':
-            self.current_layout = layouts.main_layout(self)
+            self.current_layout = layout_menu(self)
         elif type == 'des':
-           self.current_layout = layouts.des_layout(self)
+           self.current_layout = layout_des(self)
         else:
            print("Error: Unknown layout type")
 

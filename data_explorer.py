@@ -4,11 +4,10 @@
 """
 
 
-# Import libraries
+# Imports
 import sys
 sys.dont_write_bytecode = True # Don't write bytecode files to disk (pyc)
 
-# Import modules
 from view.data_explorer_view import DES_View
 
 

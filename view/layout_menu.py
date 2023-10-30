@@ -9,11 +9,8 @@ sys.dont_write_bytecode = True
 
 import PySimpleGUI as sg
 
-import view.data_explorer_view as des
 import controller.DES.exit_button as exit_button
-import controller.DES.figure_list_select as figure_list_select
 import controller.DES.new_des as new_des
-import controller.DES.open_csv as open_csv
 import controller.DES.login_page as login_page
 import controller.DES.register_page as register_page
 import controller.DES.login_button as login_button
@@ -22,7 +19,7 @@ import controller.DES.back_button as back_button
 
 
 # Procedures
-def main_layout(view):
+def layout(view):
     # Welcome screen layout
     view.components['title'] = sg.Text('Data Scout: Data Set Explorer', font='Any 28', size=(700,1), justification='center')
     view.components['welcome_text'] = sg.Text('Explore large data sets with ease', font='Any 16', pad=(0,(0,20)))
@@ -145,7 +142,3 @@ def main_layout(view):
         sg.Column(layout_home, visible=False, key='-COL_HOME-'),
         sg.VPush()
     ]]
-
-
-def des_layout(view):
-    pass
