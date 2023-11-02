@@ -7,7 +7,7 @@
 """
 
 
-# Import libraries
+# Imports
 import csv
 
 
@@ -16,7 +16,7 @@ global file_path
 file_path = './database/accounts.csv'
 
 
-# Functions
+# Procedures
 def read_csv_file():
     """
         This function reads the csv file and returns the data.

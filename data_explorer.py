@@ -4,12 +4,12 @@
 """
 
 
-# Import libraries
+# Imports
 import sys
 sys.dont_write_bytecode = True # Don't write bytecode files to disk (pyc)
 
-# Import modules
-from view.data_explorer_view import DES_View
+from view.window_view import Window_View
+from view.menu_view import Menu_View
 
 
 # Main code
@@ -17,7 +17,8 @@ if __name__ == "__main__" :
     """
         Code that runs when this is the main module.
     """
-    des_obj = DES_View()
-    des_obj.set_up_layout()
+    Window_View.set_theme()
+    des_obj = Menu_View()
+    des_obj.set_layout()
     des_obj.render()
-    DES_View.accept_input()
+    Window_View.accept_input()
