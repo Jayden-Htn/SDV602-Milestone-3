@@ -14,6 +14,7 @@ def accept(event, values, state):
         if des_owner != 'Select a DES':
             # Create window
             des_obj = DES_View()
-            des_obj.set_up_layout('other_des', des_owner)
+            des_obj.set_layout()
+            # des_obj.set_data(des_owner)
             des_obj.render()
     return keep_going 

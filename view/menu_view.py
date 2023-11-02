@@ -19,7 +19,7 @@ class Menu_View(Window_View):
         super().__init__()
 
 
-    def set_up_layout(self):
+    def set_layout(self):
         self.current_layout = layout_menu(self)
 
     

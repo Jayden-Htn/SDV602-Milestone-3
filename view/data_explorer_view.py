@@ -15,12 +15,13 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import PySimpleGUI as sg
 import inspect
 
+from view.window_view import Window_View
 import view.chart_examples as ce 
 from view.layouts.layout_des import layout as layout_des
 
 
 # Procedures
-class DES_View(object):
+class DES_View(Window_View):
     user = None
     def __init__(self):
         super().__init__()
@@ -33,16 +34,16 @@ class DES_View(object):
                          'Pie Chart 1': (ce.pie_chart1,{}), 'Pie Chart 2': (ce.pie_chart2,{})}
 
 
-    def have_selected_graph(self,values):
+    def have_selected_graph(self, values):
         return len(values['-LISTBOX-']) > 0
   
 
-    def update_component_text(self,component_name, text):
+    def update_component_text(self, component_name, text):
         if component_name in self.components:
             self.components[component_name].update(text)
 
 
-    def update_current_data(self,values,file_name=None, **kwargs):
+    def update_current_data(self, values, file_name=None, **kwargs):
         if self.have_selected_graph(values): 
             the_file_name = file_name
             choice = values['-LISTBOX-'][0] 
@@ -61,20 +62,20 @@ class DES_View(object):
             self.figure_list_draw(values)
 
         
-    def draw_figure(self,canvas, figure):
+    def draw_figure(self, canvas, figure):
         figure_canvas_agg = FigureCanvasTkAgg(figure, canvas)
         figure_canvas_agg.draw()
         figure_canvas_agg.get_tk_widget().pack(side='top', fill='both', expand=1)
         return figure_canvas_agg
 
 
-    def delete_figure_agg(self,figure_agg):
+    def delete_figure_agg(self, figure_agg):
         if self.figure_agg:
             self.figure_agg.get_tk_widget().forget()
         plt.close('all')
 
 
-    def figure_list_draw(self,values):
+    def figure_list_draw(self, values):
         if self.have_selected_graph(values) :
             choice = values['-LISTBOX-'][0]                 # get first listbox item chosen (returned as a list)
             func_tuple = self.fig_dict[choice]                         # get function to call from the dictionary
@@ -97,5 +98,5 @@ class DES_View(object):
             self.figure_agg = self.draw_figure(self.window['-CANVAS-'].TKCanvas, fig)  # draw the figure
 
 
-    def set_up_layout(self):
+    def set_layout(self):
         self.current_layout = layout_des(self)

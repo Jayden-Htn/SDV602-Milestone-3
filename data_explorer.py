@@ -19,6 +19,6 @@ if __name__ == "__main__" :
     """
     Window_View.set_theme()
     des_obj = Menu_View()
-    des_obj.set_up_layout()
+    des_obj.set_layout()
     des_obj.render()
-    Menu_View.accept_input()
+    Window_View.accept_input()
