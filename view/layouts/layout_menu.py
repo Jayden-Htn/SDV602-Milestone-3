@@ -109,7 +109,6 @@ def layout(view):
     view.components['other_des'] = sg.Button('Open DES', key='-OTHER_DES-', size=(15,1))
     view.components['exit_button'] = sg.Button('Exit', key='-EXIT_2-', size=(15,1))
     view.controls += [new_des.accept]
-    view.controls += [new_des.accept]
     view.controls += [exit_button.accept]
 
     frame_layout = [

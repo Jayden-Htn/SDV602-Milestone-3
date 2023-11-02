@@ -55,6 +55,7 @@ class Window_View():
             for view in Window_View.view_list:
                 if view.window == window:
                     active_view = view
+                    # Active view is the window that the event came from
             # Check for window close
             if event == sg.WIN_CLOSED or event == 'Exit':
                     keep_going = False
