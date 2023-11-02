@@ -40,7 +40,7 @@ class Window_View():
     def render(self):
         # create the form and show it without the plot
         if self.current_layout != [] :
-            self.window = sg.Window('Data Scout: Data Set Explorer', self.current_layout, size=(700, 400), finalize=True)
+            self.window = sg.Window('Data Scout: Data Set Explorer', self.current_layout, size=(900, 500), finalize=True)
       
 
     # class static method, level reading
