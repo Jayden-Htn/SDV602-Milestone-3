@@ -9,12 +9,12 @@ sys.dont_write_bytecode = True
 
 import PySimpleGUI as sg
 
-import controller.DES.exit_button as exit_button
-import controller.DES.figure_list_select as figure_list_select
-import controller.DES.open_csv as open_csv
-import controller.DES.zoom as zoom
-import controller.DES.pan as pan
-import controller.DES.chat as chat
+import controller.exit_button as exit_button
+import controller.des.figure_list_select as figure_list_select
+import controller.des.open_csv as open_csv
+import controller.des.zoom as zoom
+import controller.des.pan as pan
+import controller.des.chat as chat
 
 
 # Procedures
@@ -22,7 +22,8 @@ def layout(view):
     # Left column contains chart display and title
     view.components['title'] = sg.Text('Data Scout: Data Set Explorer', font='Any 28', size=(700,1), justification='center')
     view.components['user'] = sg.Text('User\'s name', font='Any 18', justification='right', pad=(0,(0,20)))
-    view.components['chart'] = sg.Text('Chart goes here', pad=(0,(0,20)), size=(45,15), background_color='lightgrey')
+    view.components['chart'] = sg.Text('Chart goes here', pad=(0,(0,20)), size=(5,3), background_color='lightgrey')
+    # 45 x 15 is the size of the chart display 
 
     # Right column contains chart controls
     view.components['exit_button'] = sg.Button(button_text='Exit', key='-EXIT-', size=(20,1))
@@ -50,7 +51,8 @@ def layout(view):
                 [view.components['user']],
                 [view.components['chart']],
             ],
-            element_justification='center'
+            element_justification='left',
+            background_color='red'
         ),
         sg.Column(
             layout=[
@@ -62,7 +64,8 @@ def layout(view):
                 [view.components['pan'], view.components['pan_slider']],
                 [view.components['chat']]
             ],
-            element_justification='right'
+            element_justification='right',
+            background_color='blue'
         )
     ]]
 

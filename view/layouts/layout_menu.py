@@ -9,13 +9,13 @@ sys.dont_write_bytecode = True
 
 import PySimpleGUI as sg
 
-import controller.DES.exit_button as exit_button
-import controller.DES.new_des as new_des
-import controller.DES.login_page as login_page
-import controller.DES.register_page as register_page
-import controller.DES.login_button as login_button
-import controller.DES.register_button as register_button
-import controller.DES.back_button as back_button
+import controller.exit_button as exit_button
+import controller.menu.new_des as new_des
+import controller.menu.login_page as login_page
+import controller.menu.register_page as register_page
+import controller.menu.login_button as login_button
+import controller.menu.register_button as register_button
+import controller.menu.back_button as back_button
 
 
 # Procedures
