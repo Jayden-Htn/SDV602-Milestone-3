@@ -3,7 +3,7 @@ New DES button controller
 """
 import sys
 sys.dont_write_bytecode = True
-from view.data_explorer_view import DES_View
+from view.explorer_view import DES_View
 
 
 def accept(event, values, state):
