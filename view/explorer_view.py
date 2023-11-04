@@ -45,10 +45,12 @@ class DES_View(Window_View):
         # Disable owner controls
         if self.user != Window_View.user:
             self.window['-DATASET-'].update(disabled=True)
-            self.window['-DATASET-'].update(button_color=('#e6e6e6','#e6e6e6'))
-            # Add edit title and description button, will be disabled if not owner too
+            self.window['-DATASET-'].update(button_color=('#D0E9DD','#D0E9DD'))
+            self.window['-DETAILS-'].update(disabled=True)
+            self.window['-DETAILS-'].update(button_color=('#D0E9DD','#D0E9DD'))
 
         # Get chart data
+        # self.figure_list_draw({'-LISTBOX-':[]})
 
         # Set chart data
 
