@@ -11,6 +11,7 @@ import PySimpleGUI as sg
 
 # Procedures
 class Window_View():
+    user = None
     view_list = []
     def __init__(self):
         self.window = None

@@ -43,6 +43,10 @@ class DES_View(Window_View):
         self.window['-USER-'].update(f'Managed by {self.user}')
 
         # Disable owner controls
+        if self.user != Window_View.user:
+            self.window['-DATASET-'].update(disabled=True)
+            self.window['-DATASET-'].update(button_color=('#e6e6e6','#e6e6e6'))
+            # Add edit title and description button, will be disabled if not owner too
 
         # Get chart data
 
@@ -51,11 +55,6 @@ class DES_View(Window_View):
 
     def have_selected_graph(self, values):
         return len(values['-LISTBOX-']) > 0
-  
-
-    def update_component_text(self, component_name, text):
-        if component_name in self.components:
-            self.components[component_name].update(text)
 
 
     def update_current_data(self, values, file_name=None, **kwargs):

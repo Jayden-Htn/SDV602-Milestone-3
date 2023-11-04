@@ -14,7 +14,6 @@ import model.data.accounts as accounts
 
 # Procedures
 class Menu_View(Window_View):
-    user = None
     def __init__(self):
         super().__init__()
 
@@ -30,5 +29,9 @@ class Menu_View(Window_View):
         # Update DES dropdown
         des_list = accounts.get_other_names(instance.user)
         window['-DES_DROPDOWN-'].update(values=des_list)
-        window['-DES_DROPDOWN-'].update(value='Select a DES')             
+        window['-DES_DROPDOWN-'].update(value='Select a DES')  
+
+
+    def set_user(name):
+        Window_View.user = name
        

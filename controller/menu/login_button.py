@@ -13,7 +13,7 @@ def accept(event, values, instance):
         accounts_exists = accounts.verify_account(values['-EMAIL-'], values['-PASSWORD-'])
         if accounts_exists:
             # Add current user
-            view.Menu_View.user = accounts.get_display_name(values['-EMAIL-'])
+            view.Menu_View.set_user(accounts.get_display_name(values['-EMAIL-']))
             # Switch screen
             instance.window['-COL_LOGIN-'].update(visible=False)
             instance.window['-COL_HOME-'].update(visible=True)
