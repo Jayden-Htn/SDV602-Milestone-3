@@ -16,15 +16,15 @@ import PySimpleGUI as sg
 import inspect
 
 from view.window_view import Window_View
-import view.chart_examples as ce 
 from view.layouts.layout_des import layout as layout_des
+import view.chart_examples as ce 
 
 
 # Procedures
 class DES_View(Window_View):
-    user = None
-    def __init__(self):
+    def __init__(self, name):
         super().__init__()
+        self.user = name
         self.figure_agg = None
         self.my_lastfig = None
         self.fig_dict = {'Line Plot': (ce.line_plot,{}), 'Plot Dots(discrete plot)': (ce.discrete_plot,{}),
@@ -32,6 +32,21 @@ class DES_View(Window_View):
                          'Bar Chart': (ce.bar_chart,{}), 'Histogram': (ce.histogram,{'title':'Our Histogram Name'}),
                          'Scatter Plots': (ce.scatter_plots,{}), 'Stack Plot': (ce.stack_plot,{}),
                          'Pie Chart 1': (ce.pie_chart1,{}), 'Pie Chart 2': (ce.pie_chart2,{})}
+
+
+    def set_layout(self):
+        self.current_layout = layout_des(self)
+
+
+    def set_data(self):
+        # Set user
+        self.window['-USER-'].update(f'Managed by {self.user}')
+
+        # Disable owner controls
+
+        # Get chart data
+
+        # Set chart data
 
 
     def have_selected_graph(self, values):
@@ -96,7 +111,4 @@ class DES_View(Window_View):
             self.update_component_text('data_file_name',the_file_name)
             
             self.figure_agg = self.draw_figure(self.window['-CANVAS-'].TKCanvas, fig)  # draw the figure
-
-
-    def set_layout(self):
-        self.current_layout = layout_des(self)
+    

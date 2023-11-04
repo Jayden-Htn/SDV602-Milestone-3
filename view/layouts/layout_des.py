@@ -22,7 +22,7 @@ import controller.des.chat_button as chat_button
 def layout(view):
     # Left column contains chart display and title
     view.components['title'] = sg.Text('Title of the data', font='Any 24', size=(25,1))
-    view.components['user'] = sg.Text('Managed by {User\'s name}', font='Any 14', justification='right', pad=((5,0),(0,10)))
+    view.components['user'] = sg.Text('Managed by {User\'s name}', font='Any 14', justification='right', pad=((5,0),(0,10)), key='-USER-')
     view.components['chart'] = sg.Canvas(size=(550,500), background_color='#D0E9DD', key='-CANVAS-')
     # 45 x 15 is the size of the chart display 
 
@@ -46,7 +46,6 @@ def layout(view):
     view.controls += [zoom.accept]
     view.controls += [pan.accept]
     view.controls += [chat_button.accept]
-
 
     # Full layout
     return [[
@@ -72,7 +71,3 @@ def layout(view):
             element_justification='right',
         )
     ]]
-
-
-def des_layout(view):
-    pass
