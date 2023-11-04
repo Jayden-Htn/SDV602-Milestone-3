@@ -13,7 +13,7 @@ def accept(event, values, state):
         des_owner = values['-DES_DROPDOWN-']
         if des_owner != 'Select a DES':
             # Create window
-            des_obj = DES_View("Ben")
+            des_obj = DES_View(des_owner)
             des_obj.set_layout()
             des_obj.render()
             des_obj.set_data()
