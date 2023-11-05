@@ -157,7 +157,7 @@ if __name__ == "__main__":
     csv_file_obj = data_manager.get_file(csv_file_name)
     print(f" STATUS [{data_manager.status}]")
     if not('File Error') in data_manager.status:
-        dict_lst,values_lst = data_manager.scan(filter=lambda line: '5' in [line_col(line,4)]  ,has_header = False,csv_file = csv_file_obj)
+        dict_lst,values_lst = data_manager.scan(filter=lambda line: '5' in [line_col(line,4)], has_header = False, csv_file = csv_file_obj)
         data_manager.close_file(csv_file_obj)
         if not('File Error') in data_manager.status: data_manager.display_table(dict_lst)
 

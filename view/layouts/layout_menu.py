@@ -22,6 +22,7 @@ import controller.menu.back_button as back_button
 def layout(view):
     components = view.components
     controls = view.controls
+    
     # Welcome screen layout
     components['title'] = sg.Text('Data Scout: Data Set Explorer', font='Any 28', size=(700,1), justification='center')
     components['welcome_text'] = sg.Text('Explore large data sets with ease', font='Any 16', pad=(0,(0,20)))

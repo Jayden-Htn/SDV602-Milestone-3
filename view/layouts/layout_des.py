@@ -23,6 +23,7 @@ import controller.des.chat_button as chat_button
 def layout(view):
     components = view.components
     controls = view.controls
+
     # Left column contains chart display and title
     components['title'] = sg.Text('Title of the data', font='Any 24', size=(25,1))
     components['user'] = sg.Text('Managed by {User\'s name}', font='Any 14', justification='right', pad=((5,0),(0,10)), key='-USER-')
@@ -35,7 +36,7 @@ def layout(view):
     components['details_button'] = sg.Button(button_text='Details', key='-DETAILS-', size=(8,1), pad=((0,30),(27,0)))
     components['description'] = sg.Text('Description goes here', font='Any 12', size=(35,7), pad=(0,(30,10)), background_color='#D0E9DD')
     components['chart_label'] = sg.Text('Charts', font='Any 12', size=(5,1), pad=(0,(0,0)))
-    components['chart_list'] = sg.Combo(values=['Chart 1', 'Chart 2'], size=(23,1), key='-FIGURE_LIST-', enable_events=True)
+    components['chart_list'] = sg.Combo(values=['Chart 1', 'Chart 2'], size=(23,1), key='-CHART_LIST-', enable_events=True)
     components['zoom_label'] = sg.Text('Zoom', size=(5,1))
     components['zoom_slider'] = sg.Slider(range=(1,100), default_value=1, orientation='h', key='-ZOOM-', enable_events=True)
     components['pan_label'] = sg.Text('Pan', size=(5,1))
