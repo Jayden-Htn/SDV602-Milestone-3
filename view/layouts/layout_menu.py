@@ -9,7 +9,7 @@ sys.dont_write_bytecode = True
 
 import PySimpleGUI as sg
 
-import controller.exit_button as exit_button
+import controller.menu.exit_button as exit_button
 import controller.menu.new_des as new_des
 import controller.menu.login_page as login_page
 import controller.menu.register_page as register_page

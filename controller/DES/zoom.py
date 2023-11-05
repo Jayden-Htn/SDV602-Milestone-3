@@ -8,7 +8,6 @@ import model.data.accounts as accounts
 
 
 def accept(event, values, instance):
-    keep_going = True
     if event == '':
         pass
-    return keep_going
+    return True
