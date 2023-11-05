@@ -1,5 +1,5 @@
 """
-    This module handles the reading and writing of the csv file.
+    This module handles the reading and writing of the accounts csv file.
 
     Functions:
         read_csv_file(): This function reads the csv file and returns the data.

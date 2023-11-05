@@ -2,7 +2,7 @@
 This is the Model class the super class of all Models 
 """
 from tkinter.constants import S
-from model.data.data_scan import DataManager
+from model.data.data_scan import Data_Manager
 
 
 class Model():
@@ -10,7 +10,7 @@ class Model():
         self.record_set = None
         self.values = None
         self.field_names = None
-        self.data_manager = DataManager()
+        self.data_manager = Data_Manager()
 
         if data_source != None:
             csv_file_obj = self.data_manager.get_file(data_source)
