@@ -18,13 +18,14 @@ import inspect
 from view.window_view import Window_View
 from view.layouts.layout_des import layout as layout_des
 import view.charts as charts
+from model.data.data_scan import Data_Manager
 
 
 # Procedures
 class DES_View(Window_View):
     def __init__(self, name):
         super().__init__()
-        self.user = name
+        self.owner = name
         self.chart_agg = None
         self.last_chart = None
         self.chart_dict = {'Line Plot': (charts.line_plot,{}), 'Plot Dots (discrete plot)': (charts.discrete_plot,{}),
@@ -39,26 +40,28 @@ class DES_View(Window_View):
 
 
     def set_data(self):
-        # Set user
-        self.window['-USER-'].update(f'Managed by {self.user}')
+        # Set owner
+        self.window['-USER-'].update(f'Managed by {self.owner}')
 
         # Set chart options
         self.window['-CHART_LIST-'].update(values=list(self.chart_dict))
         self.window['-CHART_LIST-'].update(value=list(self.chart_dict)[0])
 
-
         # Disable owner controls
-        if self.user != Window_View.user:
+        if self.owner != Window_View.user:
             self.window['-DATASET-'].update(disabled=True)
             self.window['-DATASET-'].update(button_color=('#D0E9DD','#D0E9DD'))
             self.window['-DETAILS-'].update(disabled=True)
             self.window['-DETAILS-'].update(button_color=('#D0E9DD','#D0E9DD'))
 
         # Get chart data
-        
+        data = Data_Manager.get_data(self.owner)
+        if data != None:
+            # Set chart data
+            self.update_current_data(self.window, file_name=data.file_name, data=data.data, title=data.title, x_label=data.x_label, y_label=data.y_label)
 
-        # Set chart data
-        # self.chart_list_draw({'-LISTBOX-':[]})
+        # Update title to display no data
+        self.window['-TITLE-'].update('No Data Set')
 
 
     def have_selected_graph(self, values):
