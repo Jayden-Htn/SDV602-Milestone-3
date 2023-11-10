@@ -21,4 +21,5 @@ if __name__ == "__main__" :
     des_obj = DES_View('Sam')
     des_obj.set_layout()
     des_obj.render()
+    des_obj.set_data()
     Window_View.accept_input()
