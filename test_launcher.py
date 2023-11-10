@@ -18,7 +18,7 @@ if __name__ == "__main__" :
         Code that runs when this is the main module.
     """
     Window_View.set_theme()
-    des_obj = DES_View()
+    des_obj = DES_View('Sam')
     des_obj.set_layout()
     des_obj.render()
     Window_View.accept_input()
