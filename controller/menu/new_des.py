@@ -7,7 +7,6 @@ from view.explorer_view import DES_View
 
 
 def accept(event, values, state):
-    keep_going = True
     if event == '-OTHER_DES-':
         # Get selected user
         des_owner = values['-DES_DROPDOWN-']
@@ -17,4 +16,4 @@ def accept(event, values, state):
             des_obj.set_layout()
             des_obj.render()
             des_obj.set_data()
-    return keep_going 
+    return True 

@@ -9,7 +9,6 @@ import view.menu_view as view
 
 
 def accept(event, values, instance):
-    keep_going = True
     if event == '-REGISTER_BUTTON-':
         email_exists = accounts.check_for_item(values['-EMAIL_2-'], 'email')
         name_exists = accounts.check_for_item(values['-NAME-'], 'name')
@@ -27,4 +26,4 @@ def accept(event, values, instance):
             sg.Popup('Register failed. Email already in use.')
         elif name_exists:
             sg.Popup('Register failed. Name already in use.')
-    return keep_going
+    return True

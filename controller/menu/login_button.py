@@ -8,7 +8,6 @@ import model.data.accounts as accounts
 import view.menu_view as view
 
 def accept(event, values, instance):
-    keep_going = True
     if event == '-LOGIN_BUTTON-':
         accounts_exists = accounts.verify_account(values['-EMAIL-'], values['-PASSWORD-'])
         if accounts_exists:
@@ -21,5 +20,5 @@ def accept(event, values, instance):
             view.Menu_View.load_home_page(instance)
         else:
             sg.Popup('Login failed. Incorrect email or password.')
-    return keep_going
+    return True
 
