@@ -27,7 +27,7 @@ def layout(view):
     # Left column contains chart display and title
     components['title'] = sg.Text('Title of the data', font='Any 24', size=(25,1), key='-TITLE-')
     components['user'] = sg.Text('Managed by {User\'s name}', font='Any 14', pad=((5,0),(0,10)), key='-USER-')
-    components['chart'] = sg.Canvas(size=(550,500), background_color='#D0E9DD', key='-CANVAS-')
+    components['chart'] = sg.Canvas(size=(650,600), background_color='#D0E9DD', key='-CANVAS-')
 
     # Right column contains chart controls
     components['close_button'] = sg.Button(button_text='Close', key='-CLOSE-', size=(8,1), pad=((0, 10),(20,0)))
