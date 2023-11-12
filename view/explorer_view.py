@@ -6,14 +6,10 @@ This file contains the view for the data explorer screen, sets up the layout and
 # Imports
 import sys
 sys.dont_write_bytecode = True
-from typing import Dict
-import numpy as np
 import matplotlib
 matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-import PySimpleGUI as sg
-import inspect
 
 from view.window_view import Window_View
 from view.layouts.layout_des import layout as layout_des
@@ -30,7 +26,7 @@ class DES_View(Window_View):
         self.last_chart = None
         self.chart_dict = {'Line Plot': (charts.line_plot,{}), 'Plot Dots (discrete plot)': (charts.discrete_plot,{}),
                          'Name and Label': (charts.names_labels,{}), 'Plot many Lines': (charts.multiple_plots,{}),
-                         'Bar Chart': (charts.bar_chart,{}), 'Histogram': (charts.histogram,{'title':'Our Histogram Name'}),
+                         'Bar Chart': (charts.bar_chart,{}), 'Histogram': (charts.histogram,{}),
                          'Scatter Plots': (charts.scatter_plots,{}), 'Stack Plot': (charts.stack_plot,{}),
                          'Pie Chart 1': (charts.pie_chart1,{}), 'Pie Chart 2': (charts.pie_chart2,{})}
 
@@ -48,77 +44,83 @@ class DES_View(Window_View):
         self.window['-CHART_LIST-'].update(value=list(self.chart_dict)[0])
 
         # Disable owner controls
+        disabled_color = ('#D0E9DD','#D0E9DD')
         if self.owner != Window_View.user:
             self.window['-DATASET-'].update(disabled=True)
-            self.window['-DATASET-'].update(button_color=('#D0E9DD','#D0E9DD'))
+            self.window['-DATASET-'].update(button_color=disabled_color)
             self.window['-DETAILS-'].update(disabled=True)
-            self.window['-DETAILS-'].update(button_color=('#D0E9DD','#D0E9DD'))
+            self.window['-DETAILS-'].update(button_color=disabled_color)
 
         # Get chart data
-        data = Data_Manager.get_data(self.owner)
-        if data != None:
-            # Set chart data
-            self.update_current_data(self.window, file_name=data.file_name, data=data.data, title=data.title, x_label=data.x_label, y_label=data.y_label)
+        print("BEFORE")
+        data_manager = Data_Manager()
+        data = None
+        info = None
+        if data_manager.get_data(self.owner) != None:
+            print("TWO")
+            data = data_manager.values_list
+            print("THREE")
+            info = data_manager.get_chart_info(self.owner) # Title, description, etc.
 
-        # Update title to display no data
-        self.window['-TITLE-'].update('No Data Set')
+        # Set chart data
+        print("FOUR")
+        self.update_current_chart(data, info)
 
 
-    def have_selected_graph(self, values):
-        return len(values['-LISTBOX-']) > 0
+    def get_selected_chart(self):
+        # Check if user selected a chart
+        if self.window['-CHART_LIST-'] in self.chart_dict:
+            print("returning", self.chart_dict['-CHART_LIST-'] in self.chart_dict)
+            return self.chart_dict['-CHART_LIST-'].get() in self.chart_dict
+        # If not, set to default
+        return self.chart_dict['Line Plot']
 
 
-    def update_current_data(self, values, file_name=None, **kwargs):
-        if self.have_selected_graph(values): 
-            the_file_name = file_name
-            choice = values['-LISTBOX-'][0] 
-            (func,args) = self.chart_dict[choice]
-            for arg_name in kwargs:
-                args[arg_name] = kwargs[arg_name]
-            
-            if 'file_name' in args :
-                the_file_name = args['file_name']
-            if the_file_name != None :
-                args['file_name'] = the_file_name
-            else:
-                the_file_name = "No data"
-            self.update_component_text('data_file_name',the_file_name)
-            self.chart_dict[choice] = (func,args)
-            self.chart_list_draw(values)
-
+    def update_current_chart(self, data, info):
+        # Get selected chart type function
+        func, args = self.get_selected_chart()
         
+        # Set details
+        if info != None:
+            self.window['-TITLE-'].update(info['title'])
+            self.window['-DESCRIPTION-'].update(info['description'])
+        else:
+            self.window['-TITLE-'].update('No Data Set')
+            self.window['-DESCRIPTION-'].update('No Data Set')
+
+        # Set title
+        self.chart_draw_handler(data, func, args)
+
+
+    def chart_draw_handler(self, values, func, kwargs):
+        """
+        Handles the drawing of new charts on the canvas.
+
+        Parameters
+            values (dict): The values from the window.
+        """
+        # Multiline
+        # self.window['-MULTILINE-'].update(inspect.getsource(func)) # show source code to function in multiline
+        
+        # Get chart
+        chart = func(**kwargs)
+        
+        # Clean up previous drawing before drawing again
+        self.delete_chart_agg()
+        
+        # Draw the chart
+        self.chart_agg = self.draw_chart(self.window['-CANVAS-'].TKCanvas, chart)  # draw the chart
+
+
     def draw_chart(self, canvas, chart):
         chart_canvas_agg = FigureCanvasTkAgg(chart, canvas)
         chart_canvas_agg.draw()
-        chart_canvas_agg.get_tk_widget().pack(side='top', fill='both', expand=1)
+        chart_canvas_agg.get_tk_widget().pack(side='left', fill='none', expand=0)
         return chart_canvas_agg
 
 
-    def delete_chart_agg(self, chart_agg):
+    def delete_chart_agg(self):
         if self.chart_agg:
             self.chart_agg.get_tk_widget().forget()
         plt.close('all')
-
-
-    def chart_list_draw(self, values):
-        if self.have_selected_graph(values) :
-            choice = values['-LISTBOX-'][0]                 # get first listbox item chosen (returned as a list)
-            func_tuple = self.chart_dict[choice]                         # get function to call from the dictionary
-            kwargs = func_tuple[1]
-            
-            func = func_tuple[0]
-            
-            self.window['-MULTILINE-'].update(inspect.getsource(func))  # show source code to function in multiline
-            
-            chart = func(**kwargs)                                    # call function to get the chart
-            
-            # ** IMPORTANT ** Clean up previous drawing before drawing again
-            self.delete_chart_agg(self.chart_agg)
-
-            the_file_name = "No Data"
-            if 'file_name' in kwargs:
-                the_file_name = kwargs['file_name']
-            self.update_component_text('data_file_name',the_file_name)
-            
-            self.chart_agg = self.draw_chart(self.window['-CANVAS-'].TKCanvas, chart)  # draw the chart
     
