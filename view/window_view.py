@@ -41,7 +41,7 @@ class Window_View():
     def render(self):
         # create the form and show it without the plot
         if self.current_layout != [] :
-            self.window = sg.Window('Data Scout: Data Set Explorer', self.current_layout, size=(900, 500), finalize=True)
+            self.window = sg.Window('Data Scout: Data Set Explorer', self.current_layout, size=(1000, 600), finalize=True)
       
 
     # class static method, level reading
@@ -62,10 +62,6 @@ class Window_View():
                     keep_going = False
             for accept_control in active_view.controls:
                 # Determine loop and handle event
-                keep_going = accept_control(event, values, active_view)            
+                keep_going = accept_control(event, values, active_view)         
             if active_view != None:
                 active_view.window.refresh()
-
-
-            
-       

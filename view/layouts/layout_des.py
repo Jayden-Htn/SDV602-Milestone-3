@@ -30,9 +30,9 @@ def layout(view):
     components['chart'] = sg.Canvas(size=(550,500), background_color='#D0E9DD', key='-CANVAS-')
 
     # Right column contains chart controls
-    components['close_button'] = sg.Button(button_text='Close', key='-CLOSE-', size=(8,1), pad=((0, 10),(27,0)))
-    components['dataset_button'] = sg.Button(button_text='Dataset', key='-DATASET-', size=(8,1), pad=((0,30),(27,0)))
-    components['details_button'] = sg.Button(button_text='Details', key='-DETAILS-', size=(8,1), pad=((0,30),(27,0)))
+    components['close_button'] = sg.Button(button_text='Close', key='-CLOSE-', size=(8,1), pad=((0, 10),(20,0)))
+    components['dataset_button'] = sg.Button(button_text='Dataset', key='-DATASET-', size=(8,1), pad=((0,30),(20,0)))
+    components['details_button'] = sg.Button(button_text='Details', key='-DETAILS-', size=(8,1), pad=((0,30),(20,0)))
     components['description'] = sg.Text('Description goes here', key='-DESCRIPTION-', font='Any 12', size=(35,7), pad=(0,(30,10)), background_color='#D0E9DD')
     components['chart_label'] = sg.Text('Charts', font='Any 12', size=(5,1), pad=((0,5),0))
     components['chart_list'] = sg.Combo(values=['Chart 1', 'Chart 2'], size=(26,1), key='-CHART_LIST-', pad=(0,4), enable_events=True)
@@ -40,7 +40,7 @@ def layout(view):
     components['zoom_slider'] = sg.Slider(range=(1,100), size=(30,15), pad=(0,4), default_value=1, orientation='h', key='-ZOOM-', enable_events=True)
     components['pan_label'] = sg.Text('Pan', size=(5,1))
     components['pan_slider'] = sg.Slider(range=(1,100), size=(30,15), pad=(0,4), default_value=1, orientation='h', key='-PAN-', enable_events=True)
-    components['chat'] = sg.Text(size=(35,5), background_color='#D0E9DD', key='-CHAT-', pad=(0,(10,0)))
+    components['chat'] = sg.Text(size=(35,10), background_color='#D0E9DD', key='-CHAT-', pad=(0,(10,0)))
     components['chat_input'] = sg.InputText(size=(25,1), key='-CHAT_INPUT-')
     components['chat_button'] = sg.Button('Send', key='-CHAT_BUTTON-', size=(10,1))
     controls += [close_button.accept]
@@ -61,7 +61,7 @@ def layout(view):
                 [components['chart']],
             ],
             element_justification='left',
-            size=(550,500)
+            size=(650,600)
         ),
         sg.Column(
             layout=[

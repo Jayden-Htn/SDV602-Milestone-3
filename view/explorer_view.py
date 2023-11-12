@@ -103,19 +103,19 @@ class DES_View(Window_View):
         # self.window['-MULTILINE-'].update(inspect.getsource(func)) # show source code to function in multiline
         
         # Get chart
-        chart = func(**kwargs)
+        figure = func(**kwargs)
         
         # Clean up previous drawing before drawing again
         self.delete_chart_agg()
         
         # Draw the chart
-        self.chart_agg = self.draw_chart(self.window['-CANVAS-'].TKCanvas, chart)  # draw the chart
+        self.chart_agg = self.draw_figure(self.window['-CANVAS-'].TKCanvas, figure)  # draw the chart
 
 
-    def draw_chart(self, canvas, chart):
-        chart_canvas_agg = FigureCanvasTkAgg(chart, canvas)
+    def draw_figure(self, canvas, figure):
+        chart_canvas_agg = FigureCanvasTkAgg(figure, canvas)
         chart_canvas_agg.draw()
-        chart_canvas_agg.get_tk_widget().pack(side='left', fill='none', expand=0)
+        chart_canvas_agg.get_tk_widget().pack(side='top', fill='both', expand=1)
         return chart_canvas_agg
 
 
