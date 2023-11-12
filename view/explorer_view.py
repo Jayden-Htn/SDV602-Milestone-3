@@ -52,18 +52,14 @@ class DES_View(Window_View):
             self.window['-DETAILS-'].update(button_color=disabled_color)
 
         # Get chart data
-        print("BEFORE")
         data_manager = Data_Manager()
         data = None
         info = None
         if data_manager.get_data(self.owner) != None:
-            print("TWO")
             data = data_manager.values_list
-            print("THREE")
             info = data_manager.get_chart_info(self.owner) # Title, description, etc.
 
         # Set chart data
-        print("FOUR")
         self.update_current_chart(data, info)
 
 
