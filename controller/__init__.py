@@ -1,1 +1,1 @@
-__all__ = ["DES"]
+__all__ = ["des", "menu"]
