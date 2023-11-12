@@ -95,9 +95,6 @@ class DES_View(Window_View):
         Parameters
             values (dict): The values from the window.
         """
-        # Multiline
-        # self.window['-MULTILINE-'].update(inspect.getsource(func)) # show source code to function in multiline
-        
         # Get chart
         figure = func(**kwargs)
         
