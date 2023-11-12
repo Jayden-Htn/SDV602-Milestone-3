@@ -3,22 +3,22 @@ Scans a csv file redirected or from the file object passed into the script
  "--header" indicates the first row is a header row
 """
 import sys as sys
-from os import path
-import argparse
 from typing import Dict
+
+global file_path
+file_path = './database/des_data/'
 
 class Data_Manager():
     dict_list = []
     value_list = []
     def __init__(self) -> None:
-        self.status:Dict = {}
-        self.current_files:Dict = {}
+        self.status: Dict = {}
         self.current_file = None
 
 
     def find_file(self, path_to_file):
         """
-        Gets a file object for the path_to_file
+        Gets a file object for the path_to_file, handling any errors.
 
         Args:
             path_to_file (str): The path to the file.
@@ -123,50 +123,64 @@ class Data_Manager():
             print("No items to tabulate")
 
 
-    def line_col(x,num):
+    def get_data(self, user):
         """
-        Gets num place value from each column.
-        """
-        c =  (x.strip().split(',')[num]).strip()
-        return c
-
-
-    def get_data(user):
-        """
-        Find the right file for the user's des.
+        Top-level function for des data retrieval. Find the user's matching csv file and scan the data on it.
 
         Parameters:
             user (str): The user's name.
+
+        Returns:
+            dict_list (list): A list of dictionaries representing the rows in the csv file.
+            values_list (list): A list of lists representing the rows in the csv file.
         """
-        file_path = './database/des_data/'
-        data_manager = Data_Manager()
         # Get file object
-        csv_file_obj = data_manager.find_file(file_path+user+'.csv')
+        csv_file_obj = self.find_file(file_path+user+'.csv')
         # Handle error
-        if 'File Error' in data_manager.status:
+        if 'File Error' in self.status:
+            self.close_file(csv_file_obj)
             return None
         # If file object is valid, scan the file
-        dict_list, values_list = data_manager.scan(filter=None, has_header = False, csv_file = csv_file_obj)
-        data_manager.close_file(csv_file_obj)
+        dict_list, values_list = self.scan(filter=None, has_header = True, csv_file = csv_file_obj)
+        self.close_file(csv_file_obj)
         Data_Manager.dict_list = dict_list
         Data_Manager.value_list = values_list
-        print(f" STATUS [{data_manager.status}]")
-        print("values:", values_list[:5])
         # If scan is valid, display the table
         # if not('File Error') in data_manager.status: data_manager.display_table(dict_lst)
 
 
+    def get_chart_info(self, user):
+        """
+        Gets the chart title and description from the csv file.
+        """
+        csv_file_obj = self.find_file(file_path+'des.csv')
+        # Handle error
+        if 'File Error' in self.status:
+            self.close_file(csv_file_obj)
+            return None
+        # Read each line of the csv file
+        try:
+            for aline in csv_file_obj:
+                this_line = aline.strip().split(',')
+                # If the user's name is found, return the chart info
+                if this_line[0] == user:
+                    self.close_file(csv_file_obj)
+                    return {'title': this_line[1], 'description': this_line[2]}
+        except:
+            print("Unexpected error:", sys.exc_info()[0])
+            return None
+        self.close_file(csv_file_obj)
+        return None
+
+
 if __name__ == "__main__":
     """
+    Main function for testing.
     """
-    # csv_file_name = "data.csv"
-    # data_manager = Data_Manager()
-    # csv_file_obj = data_manager.get_file(csv_file_name)
-    # print(f" STATUS [{data_manager.status}]")
-    # if not('File Error') in data_manager.status:
-    #     dict_lst,values_lst = data_manager.scan(filter=lambda line: '5' in [line_col(line,4)], has_header = False, csv_file = csv_file_obj)
-    #     data_manager.close_file(csv_file_obj)
-    #     if not('File Error') in data_manager.status: data_manager.display_table(dict_lst)
+    pass
+
+
+
 
        
 

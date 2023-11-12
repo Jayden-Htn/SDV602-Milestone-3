@@ -12,7 +12,8 @@ def accept(event, values, instance):
     if event == '-REGISTER_BUTTON-':
         email_exists = accounts.check_for_item(values['-EMAIL_2-'], 'email')
         name_exists = accounts.check_for_item(values['-NAME-'], 'name')
-        if not email_exists and not name_exists:
+        # Note: the name 'des' would conflict with internal file names
+        if not email_exists and not name_exists and values['-NAME-'] != 'des':
             # Add account
             accounts.add_account(values['-NAME-'], values['-EMAIL_2-'], values['-PASSWORD_2-'])
             # Add current user
