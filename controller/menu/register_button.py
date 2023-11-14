@@ -4,7 +4,7 @@ Register button controller
 import sys
 sys.dont_write_bytecode = True
 import PySimpleGUI as sg
-import model.data.accounts as accounts
+import model.accounts.account_handler as accounts
 import view.menu_view as view
 
 

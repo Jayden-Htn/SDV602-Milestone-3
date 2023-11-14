@@ -9,7 +9,7 @@ sys.dont_write_bytecode = True
 
 from view.window_view import Window_View
 from view.layouts.layout_menu import layout as layout_menu
-import model.data.accounts as accounts
+import model.accounts.account_handler as accounts
 
 
 # Procedures
