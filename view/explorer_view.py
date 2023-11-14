@@ -24,11 +24,11 @@ class DES_View(Window_View):
         self.owner = name
         self.chart_agg = None
         self.last_chart = None
-        self.chart_dict = {'Line Plot': (charts.line_plot,{}), 'Plot Dots (discrete plot)': (charts.discrete_plot,{}),
-                         'Name and Label': (charts.names_labels,{}), 'Plot many Lines': (charts.multiple_plots,{}),
-                         'Bar Chart': (charts.bar_chart,{}), 'Histogram': (charts.histogram,{}),
-                         'Scatter Plots': (charts.scatter_plots,{}), 'Stack Plot': (charts.stack_plot,{}),
-                         'Pie Chart 1': (charts.pie_chart1,{}), 'Pie Chart 2': (charts.pie_chart2,{})}
+        self.chart_dict = {'Line Plot': (charts.line_plot), 'Plot Dots (discrete plot)': (charts.discrete_plot),
+                         'Name and Label': (charts.names_labels), 'Plot many Lines': (charts.multiple_plots),
+                         'Bar Chart': (charts.bar_chart), 'Histogram': (charts.histogram),
+                         'Scatter Plots': (charts.scatter_plots), 'Stack Plot': (charts.stack_plot),
+                         'Pie Chart 1': (charts.pie_chart1), 'Pie Chart 2': (charts.pie_chart2)}
 
 
     def set_layout(self):
@@ -55,8 +55,8 @@ class DES_View(Window_View):
         data_manager = Data_Manager()
         data = None
         info = None
-        if data_manager.get_data(self.owner) != None:
-            data = data_manager.values_list
+        if data_manager.get_data(self.owner):
+            data = data_manager.dict_list
             info = data_manager.get_chart_info(self.owner) # Title, description, etc.
 
         # Set chart data
@@ -74,7 +74,7 @@ class DES_View(Window_View):
 
     def update_current_chart(self, data, info):
         # Get selected chart type function
-        func, args = self.get_selected_chart()
+        func = self.get_selected_chart()
         
         # Set details
         if info != None:
@@ -85,16 +85,26 @@ class DES_View(Window_View):
             self.window['-DESCRIPTION-'].update('No Data Set')
 
         # Set title
-        self.chart_draw_handler(data, func, args)
+        self.chart_draw_handler(data, func, info['title'])
 
 
-    def chart_draw_handler(self, values, func, kwargs):
+    def chart_draw_handler(self, data, func, title):
         """
         Handles the drawing of new charts on the canvas.
 
         Parameters
             values (dict): The values from the window.
         """
+        # Setup kwargs dict
+        kwargs = {}
+        list_values = list(data.values())
+        kwargs['x_values'] = list_values[0]
+        for i in range(1, len(data)):
+            kwargs[f'y_values_{i}'] = list(data.values())[i]
+        kwargs['title_label'] = title
+        kwargs['x_label'] = list(data.keys())[0]
+        kwargs['y_label'] = list(data.keys())[1]
+
         # Get chart
         figure = func(**kwargs)
         

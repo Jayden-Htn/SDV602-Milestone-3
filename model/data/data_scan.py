@@ -10,7 +10,6 @@ file_path = './database/des_data/'
 
 class Data_Manager():
     dict_list = []
-    value_list = []
     def __init__(self) -> None:
         self.status: Dict = {}
         self.current_file = None
@@ -43,7 +42,7 @@ class Data_Manager():
         file_object.close()
 
 
-    def scan(self,filter= None, has_header=False, csv_file= sys.stdin):
+    def scan(self, has_header=False, csv_file= sys.stdin):
         """
         Scans a csv and returns the row values in dictionary and list structures.
 
@@ -53,100 +52,48 @@ class Data_Manager():
             csv_file (file object, optional): The file object to scan. Defaults to sys.stdin.
 
         Returns:
-            result (list): A list of dictionaries representing the rows in the csv file.
-            values (list): A list of lists representing the rows in the csv file.
+            dict, list: The row values in dictionary and list structures.
         """
-        result = []
-        values = []
-        do_header = has_header
-        header_names = {}
+        values_dict = {}
         try:
-            lines = [aline for aline in csv_file if filter(aline)] if filter != None else csv_file
-            for aline in lines:
-                    this_line = aline.strip().split(',')
-                    if do_header:
-                        header_names = this_line
-                        # print(f" header names {header_names}")
-                        do_header = False
-                    else:
-                        a_dict = {}
-                        i = 0
-                        max_header_index = len(header_names) -1 
-                        for column in this_line:
-                            if has_header :
-                                if i > max_header_index :
-                                    break
-                                
-                                a_dict[header_names[i]] = column
-                            else:
-                                a_dict[i]= column
-                            i = i + 1 
-                        
-                        result += [a_dict]
-                        values += [this_line]
+            # Set up dict with headers as keys
+            this_line = csv_file.readline().split(',')
+            for i in range(len(this_line)):
+                values_dict[this_line[i].strip()] = []
+            
+            # Read each line of the csv file and append to each column
+            for aline in csv_file:
+                this_line = aline.strip().split(',')
+                for col, header in zip(this_line, list(values_dict.keys())):
+                    values_dict[header].append(col)
         except:
             print("Unexpected error:", sys.exc_info()[0])
-            return None, None
-
-        Data_Manager.dict_list = result
-        Data_Manager.value_list = values 
-        return result, values
-
-
-    def display_table(self,a_list_of_dictionary):
-        """
-        Prints a table with a header - if there is no header the header becomes the column number.
-
-        Args
-                a_list_of_dictionary - each item in the list is a Dictionary representing a Row in the table.
-        """
-        if a_list_of_dictionary != [] :
-            lines = ""
-            # Get a header line
-            a_dictionary = a_list_of_dictionary[0]
-            header_line = ""
-            for key in a_dictionary:
-                header_line += f'{key}\t'
-            header_line = header_line.strip()
-
-            # Make up the table
-            lines += header_line 
-
-            for a_dictionary in a_list_of_dictionary:
-                a_line = ''
-                for key,value in a_dictionary.items():
-                    a_line += f'{value}\t'
-                a_line = a_line.strip()
-                lines += f'\n{a_line}'
-            print(lines)
-        else:
-            print("No items to tabulate")
+            return None
+        # print("values_dict:", values_dict)
+        return values_dict
 
 
     def get_data(self, user):
         """
-        Top-level function for des data retrieval. Find the user's matching csv file and scan the data on it.
+        Top-level function for des data retrieval. Find the user's matching csv file and scan the data on it, storing the results in the Data_Manager class.
 
         Parameters:
             user (str): The user's name.
 
         Returns:
-            dict_list (list): A list of dictionaries representing the rows in the csv file.
-            values_list (list): A list of lists representing the rows in the csv file.
+            bool: True if the data was retrieved successfully, False otherwise.
         """
         # Get file object
         csv_file_obj = self.find_file(file_path+user+'.csv')
         # Handle error
         if 'File Error' in self.status:
             self.close_file(csv_file_obj)
-            return None
+            return False
         # If file object is valid, scan the file
-        dict_list, values_list = self.scan(filter=None, has_header = True, csv_file = csv_file_obj)
+        dict_list = self.scan(has_header = True, csv_file = csv_file_obj)
         self.close_file(csv_file_obj)
         Data_Manager.dict_list = dict_list
-        Data_Manager.value_list = values_list
-        # If scan is valid, display the table
-        # if not('File Error') in data_manager.status: data_manager.display_table(dict_lst)
+        return True
 
 
     def get_chart_info(self, user):

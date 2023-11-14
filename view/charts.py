@@ -34,16 +34,25 @@ def line_plot(**kwargs):
         title_label = kwargs['title_label']
     if 'x_values' in kwargs :
         x_values = kwargs['x_values']
-    if 'y_values' in kwargs :
-        y_values = kwargs['y_values']
+    if 'y_values_1' in kwargs :
+        y_values = kwargs['y_values_1']
 
+    # Create separate smaller tick list to avoid overlapping labels
+    if len(x_values) > 10:
+        num = round(len(x_values)/6)
+        x_ticks = x_values[::num]
+    if len(y_values) > 10:
+        num = round(len(y_values)/10)
+        y_ticks = y_values[::num]
+
+    # Create chart
     ax = plt.plot(x_values, y_values)
-    # add labels and title
     plt.xlabel(x_label)
     plt.ylabel(y_label)
     plt.title(title_label)
-     
-    #plt.show()
+    plt.xticks(x_ticks)
+    plt.yticks(y_ticks)
+
     return plt.gcf()
 
 
@@ -98,7 +107,7 @@ def names_labels(**kwargs):
     y_values = [25.6, 24.1, 26.7, 28.3, 27.5, 30.5, 32.8, 33.1]
 
     if 'x_label' in kwargs :
-        x_label = kwargs['x_label']
+        x_label = kwargs['x_values']
     if 'y_label' in kwargs :
         y_label = kwargs['y_label']
     if 'title_label' in kwargs :
