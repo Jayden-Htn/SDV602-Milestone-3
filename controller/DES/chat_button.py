@@ -9,5 +9,5 @@ def accept(event, values, instance):
     if event == '--':
         pass
         # Get input values and add to chat
-        return True
+    return True
 

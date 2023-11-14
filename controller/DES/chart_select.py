@@ -11,6 +11,6 @@ def accept(event, values, state):
         print("Chart list controller")
         pass
         # Redraw chart
-        return True
+    return True
 
 

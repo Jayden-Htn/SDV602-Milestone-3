@@ -10,5 +10,5 @@ def accept(event, values, instance):
         pass
         # Popup for data set updating
         # Local or url
-        return True
+    return True
 
