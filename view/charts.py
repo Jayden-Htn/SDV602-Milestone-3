@@ -25,6 +25,8 @@ def line_plot(**kwargs):
     title_label = 'Temperature Graph'
     x_values = range(1, 9)
     y_values = [25.6, 24.1, 26.7, 28.3, 27.5, 30.5, 32.8, 33.1]
+    zoom = 0
+    pan = 1
 
     if 'x_label' in kwargs :
         x_label = kwargs['x_label']
@@ -36,6 +38,10 @@ def line_plot(**kwargs):
         x_values = kwargs['x_values']
     if 'y_values_1' in kwargs :
         y_values = kwargs['y_values_1']
+    if 'zoom' in kwargs :
+        zoom = kwargs['zoom']
+    if 'pan' in kwargs :
+        pan = kwargs['pan']
 
     # Create separate smaller tick list to avoid overlapping labels
     if len(x_values) > 10:
@@ -52,6 +58,7 @@ def line_plot(**kwargs):
     plt.title(title_label)
     plt.xticks(x_ticks)
     plt.yticks(y_ticks)
+    plt.margins(zoom)
 
     return plt.gcf()
 

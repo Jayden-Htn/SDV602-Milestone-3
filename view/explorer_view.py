@@ -60,8 +60,13 @@ class DES_View(Window_View):
             data = data_manager.dict_list
             info = data_manager.get_chart_info(self.owner) # Title, description, etc.
 
+        # Set any chart config settings
+        config = {}
+        config['zoom'] = (-(self.window['-ZOOM-'].TKScale.get()/10)+1)
+        config['pan'] = self.window['-PAN-'].TKScale.get()
+
         # Set chart data
-        self.update_current_chart(data, info)
+        self.update_current_chart(data, info, config)
 
 
     def get_selected_chart(self):
@@ -73,7 +78,7 @@ class DES_View(Window_View):
         return self.chart_dict['Line Plot']
 
 
-    def update_current_chart(self, data, info):
+    def update_current_chart(self, data, info, config):
         # Get selected chart type function
         func = self.get_selected_chart()
         
@@ -86,10 +91,10 @@ class DES_View(Window_View):
             self.window['-DESCRIPTION-'].update('No Data Set')
 
         # Set title
-        self.chart_draw_handler(data, func, info['title'])
+        self.chart_draw_handler(data, func, info['title'], config)
 
 
-    def chart_draw_handler(self, data, func, title):
+    def chart_draw_handler(self, data, func, title, config):
         """
         Handles the drawing of new charts on the canvas.
 
@@ -105,6 +110,8 @@ class DES_View(Window_View):
         kwargs['title_label'] = title
         kwargs['x_label'] = list(data.keys())[0]
         kwargs['y_label'] = list(data.keys())[1]
+        kwargs['zoom'] = config['zoom']
+        kwargs['pan'] = config['pan']
 
         # Get chart
         figure = func(**kwargs)
