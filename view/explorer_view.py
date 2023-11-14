@@ -22,6 +22,7 @@ class DES_View(Window_View):
     def __init__(self, name):
         super().__init__()
         self.owner = name
+        self.data_manager = Data_Manager()
         self.chart_agg = None
         self.last_chart = None
         self.chart_dict = {'Line Plot': (charts.line_plot), 'Plot Dots (discrete plot)': (charts.discrete_plot),
@@ -52,7 +53,7 @@ class DES_View(Window_View):
             self.window['-DETAILS-'].update(button_color=disabled_color)
 
         # Get chart data
-        data_manager = Data_Manager()
+        data_manager = self.data_manager
         data = None
         info = None
         if data_manager.get_data(self.owner):

@@ -15,7 +15,7 @@ class Data_Manager():
         self.current_file = None
 
 
-    def find_file(self, path_to_file):
+    def find_file(self, path_to_file, mode='r'):
         """
         Gets a file object for the path_to_file, handling any errors.
 
@@ -23,7 +23,7 @@ class Data_Manager():
             path_to_file (str): The path to the file.
         """
         try:
-            self.current_file = open(path_to_file)
+            self.current_file = open(path_to_file, mode)
             return self.current_file
         except FileNotFoundError:
             file_not_found = ("File not found error", path_to_file)
@@ -42,7 +42,7 @@ class Data_Manager():
         file_object.close()
 
 
-    def scan(self, has_header=False, csv_file= sys.stdin):
+    def scan(self, has_header=False, csv_file=sys.stdin):
         """
         Scans a csv and returns the row values in dictionary and list structures.
 
@@ -90,7 +90,7 @@ class Data_Manager():
             self.close_file(csv_file_obj)
             return False
         # If file object is valid, scan the file
-        dict_list = self.scan(has_header = True, csv_file = csv_file_obj)
+        dict_list = self.scan(has_header=True, csv_file=csv_file_obj)
         self.close_file(csv_file_obj)
         Data_Manager.dict_list = dict_list
         return True
@@ -118,6 +118,40 @@ class Data_Manager():
             return None
         self.close_file(csv_file_obj)
         return None
+    
+
+    def update_des_info(self, user, title, description):
+        """
+        Updates the chart title and description in the csv file.
+
+        Parameters:
+            user (str): The user's name.
+            title (str): The chart title.
+            description (str): The chart description.
+        """
+        csv_file_obj = self.find_file(file_path+'des.csv', 'r+')
+        # Handle error
+        if 'File Error' in self.status:
+            self.close_file(csv_file_obj)
+            return False
+        # Read each line of the csv file
+        try:
+            lines = csv_file_obj.readlines()
+            for i in range(len(lines)):
+                this_line = lines[i].strip().split(',')
+                # If the user's name is found, update the chart info
+                print("comparing:", this_line[0], user)
+                if this_line[0] == user:
+                    lines[i] = user + ',' + title + ',' + description + '\n'
+                    break
+            # Write the updated lines to the csv file
+            csv_file_obj.seek(0)
+            csv_file_obj.writelines(lines)
+        except:
+            print("Unexpected error:", sys.exc_info()[0])
+            return False
+        self.close_file(csv_file_obj)
+        return True
 
 
 if __name__ == "__main__":
