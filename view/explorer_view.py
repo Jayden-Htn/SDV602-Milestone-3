@@ -10,11 +10,13 @@ import matplotlib
 matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+import datetime
 
 from view.window_view import Window_View
 from view.layouts.layout_des import layout as layout_des
 import view.charts as charts
 from model.data.data_scan import Data_Manager
+from model.chat_manager import Chat_Manager
 
 
 # Procedures
@@ -23,6 +25,7 @@ class DES_View(Window_View):
         super().__init__()
         self.owner = name
         self.data_manager = Data_Manager()
+        self.chat_manager = Chat_Manager(self.user, self.owner)
         self.chart_agg = None
         self.last_chart = None
         self.chart_dict = {'Line Plot': (charts.line_plot), 'Plot Dots (discrete plot)': (charts.discrete_plot),
@@ -64,6 +67,15 @@ class DES_View(Window_View):
         config = {}
         config['zoom'] = (-(self.window['-ZOOM-'].TKScale.get()/10)+1)
         config['pan'] = self.window['-PAN-'].TKScale.get()
+
+        # Set chat
+        self.chat_manager.set_test_messages()
+        chat_log = self.chat_manager.get_chat()
+        for message in chat_log:
+            datetime_str = datetime.datetime.utcfromtimestamp(message['Time'])
+            time = datetime_str.strftime('%H:%M')
+            self.window['-CHAT-'].print(f"<{message['UserName']} {time} UTC> {message['Message']}\n")
+        self.window['-CHAT-'].update()
 
         # Set chart data
         self.update_current_chart(data, info, config)
