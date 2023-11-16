@@ -111,6 +111,11 @@ class Chat_Manager(object):
         # print("api_result:", api_result)
         if not ('Data error' in api_result):
             self.chat_list = self.jsnDrop.jsnResult
+            # Delete messages older then 1 week
+            for message in self.chat_list:
+                if message['Time'] < (self.now_time_stamp() - 604800):
+                    self.jsnDrop.delete("tblChat", f"Time = {message['Time']}")
+
             result = self.chat_list
         else:
             result = None
