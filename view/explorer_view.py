@@ -48,12 +48,60 @@ class DES_View(Window_View):
         self.window['-CHART_LIST-'].update(value=list(self.chart_dict)[0])
 
         # Disable owner controls
+        if self.owner != Window_View.user:
+            self.disable_owner_controls()
+
+        # Set chat
+        self.set_chat()
+
+        # Set chart data
+        self.prepare_chart_data()
+
+
+    def set_chat(self):
+        # Send chat component to chat manager
+        self.chat_manager.set_chat_component(self.window['-CHAT-'])
+
+        # Set chat log
+        # self.chat_manager.set_test_messages()
+        chat_log = self.chat_manager.get_chat()
+        if chat_log == None:
+            self.window['-CHAT-'].print("No messages available")
+        else:
+            for message in chat_log:
+                datetime_str = datetime.datetime.utcfromtimestamp(message['Time'])
+                time = datetime_str.strftime('%H:%M')
+                self.window['-CHAT-'].print(f"<{message['UserName']} {time} UTC> {message['Message']}")
+        self.window['-CHAT-'].update()
+
+
+    def disable_owner_controls(self):
+        """
+        Disables the owner controls (e.g. data and detail setting).
+        """
         disabled_color = ('#D0E9DD','#D0E9DD')
         if self.owner != Window_View.user:
             self.window['-DATASET-'].update(disabled=True)
             self.window['-DATASET-'].update(button_color=disabled_color)
             self.window['-DETAILS-'].update(disabled=True)
             self.window['-DETAILS-'].update(button_color=disabled_color)
+
+
+    def get_selected_chart(self):
+        # Check if user selected a chart
+        if self.window['-CHART_LIST-'] in self.chart_dict:
+            print("returning", self.chart_dict['-CHART_LIST-'] in self.chart_dict)
+            return self.chart_dict['-CHART_LIST-'].get() in self.chart_dict
+        # If not, set to default
+        return self.chart_dict['Line Plot']
+
+
+    def prepare_chart_data(self):
+        """
+        Prepares the chart data for drawing and sets the chart details on the DES screen.
+        """
+        # Get selected chart type function
+        func = self.get_selected_chart()
 
         # Get chart data
         data_manager = self.data_manager
@@ -67,35 +115,6 @@ class DES_View(Window_View):
         config = {}
         config['zoom'] = (-(self.window['-ZOOM-'].TKScale.get()/10)+1)
         config['pan'] = self.window['-PAN-'].TKScale.get()
-
-        # Set chat
-        # self.chat_manager.set_test_messages()
-        chat_log = self.chat_manager.get_chat()
-        if chat_log == None:
-            self.window['-CHAT-'].print("No messages available")
-        else:
-            for message in chat_log:
-                datetime_str = datetime.datetime.utcfromtimestamp(message['Time'])
-                time = datetime_str.strftime('%H:%M')
-                self.window['-CHAT-'].print(f"<{message['UserName']} {time} UTC> {message['Message']}")
-        self.window['-CHAT-'].update()
-
-        # Set chart data
-        self.update_current_chart(data, info, config)
-
-
-    def get_selected_chart(self):
-        # Check if user selected a chart
-        if self.window['-CHART_LIST-'] in self.chart_dict:
-            print("returning", self.chart_dict['-CHART_LIST-'] in self.chart_dict)
-            return self.chart_dict['-CHART_LIST-'].get() in self.chart_dict
-        # If not, set to default
-        return self.chart_dict['Line Plot']
-
-
-    def update_current_chart(self, data, info, config):
-        # Get selected chart type function
-        func = self.get_selected_chart()
         
         # Set details
         if info != None:
