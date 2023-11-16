@@ -69,12 +69,15 @@ class DES_View(Window_View):
         config['pan'] = self.window['-PAN-'].TKScale.get()
 
         # Set chat
-        self.chat_manager.set_test_messages()
+        # self.chat_manager.set_test_messages()
         chat_log = self.chat_manager.get_chat()
-        for message in chat_log:
-            datetime_str = datetime.datetime.utcfromtimestamp(message['Time'])
-            time = datetime_str.strftime('%H:%M')
-            self.window['-CHAT-'].print(f"<{message['UserName']} {time} UTC> {message['Message']}\n")
+        if chat_log == None:
+            self.window['-CHAT-'].print("No messages available")
+        else:
+            for message in chat_log:
+                datetime_str = datetime.datetime.utcfromtimestamp(message['Time'])
+                time = datetime_str.strftime('%H:%M')
+                self.window['-CHAT-'].print(f"<{message['UserName']} {time} UTC> {message['Message']}")
         self.window['-CHAT-'].update()
 
         # Set chart data

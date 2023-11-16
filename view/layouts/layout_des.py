@@ -40,7 +40,7 @@ def layout(view):
     components['zoom_slider'] = sg.Slider(range=(0,14), size=(30,15), pad=(0,4), default_value=10, orientation='h', key='-ZOOM-', enable_events=True)
     components['pan_label'] = sg.Text('Pan', size=(5,1))
     components['pan_slider'] = sg.Slider(range=(1,100), size=(30,15), pad=(0,4), default_value=1, orientation='h', key='-PAN-', enable_events=True)
-    components['chat'] = sg.Text(size=(35,10), background_color='#D0E9DD', key='-CHAT-', pad=(0,(10,0)))
+    components['chat'] = sg.Multiline(size=(35,10), background_color='#D0E9DD', key='-CHAT-', pad=(0,(10,0)), disabled=True)
     components['chat_input'] = sg.InputText(size=(25,1), key='-CHAT_INPUT-')
     components['chat_button'] = sg.Button('Send', key='-CHAT_BUTTON-', size=(10,1))
     controls += [close_button.accept]

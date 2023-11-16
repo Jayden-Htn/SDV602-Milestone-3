@@ -42,13 +42,14 @@ class Chat_Manager(object):
         self.jsnDrop = jsnDrop(Chat_Manager.jsn_tok,"https://newsimland.com/~todd/JSON")
 
         # Optional clear tables
-        self.jsnDrop.drop('tblChat')
+        # self.jsnDrop.drop('tblChat')
 
         # Schema for tables, will not wipe existing data
-        result = self.jsnDrop.create("tblChat", {"UserName PK": "A_LOOONG_NAME"+('X'*50),
+        result = self.jsnDrop.create("tblChat", {"Time PK": self.now_time_stamp(),
+                                                "UserName": "A_LOOONG_NAME"+('X'*50),
                                                 "DESName": "A_LOOONG_DES_Name"+('X'*50),
-                                                "Message": "A_LOONG____CHAT_ENTRY"+('X'*255),
-                                                "Time": self.now_time_stamp()})
+                                                "Message": "A_LOONG____CHAT_ENTRY"+('X'*255)
+                                                })
 
 
     def send_chat(self, message):
@@ -64,10 +65,10 @@ class Chat_Manager(object):
         result = None 
         user_id = self.current_user
         des_screen = self.current_des
-        api_result = self.jsnDrop.store("tblChat", [{'UserName': user_id,
+        api_result = self.jsnDrop.store("tblChat", [{'Time PK': self.now_time_stamp(),
+                                                    'UserName': user_id,
                                                     'DESName': f'{des_screen}',
-                                                    'Message': message,
-                                                    'Time': self.now_time_stamp()}])
+                                                    'Message': message}])
         if "ERROR" in api_result:
             result = self.jsnDrop.jsnStatus
         else:
@@ -90,7 +91,7 @@ class Chat_Manager(object):
             self.chat_list = self.jsnDrop.jsnResult
             result = self.chat_list
         else:
-            result = ["No chat messages available"]
+            result = None
         return result
     
 
