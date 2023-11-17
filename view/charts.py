@@ -44,6 +44,8 @@ def line_plot(**kwargs):
         pan = kwargs['pan']
 
     # Create separate smaller tick list to avoid overlapping labels
+    x_ticks = x_values
+    y_ticks = y_values
     if len(x_values) > 10:
         num = round(len(x_values)/6)
         x_ticks = x_values[::num]
