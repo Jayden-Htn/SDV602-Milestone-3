@@ -9,9 +9,10 @@ def accept(event, values, instance):
     if event == '-CHAT_SEND-':
         # Get input message
         message = values['-CHAT_INPUT-']
-        # Send message to chat manager
-        instance.chat_manager.send_chat(message)
-        # Clear input field
-        instance.window['-CHAT_INPUT-'].update('')
+        if message != '':
+            # Send message to chat manager
+            instance.chat_manager.send_chat(message)
+            # Clear input field
+            instance.window['-CHAT_INPUT-'].update('')
     return True
 
