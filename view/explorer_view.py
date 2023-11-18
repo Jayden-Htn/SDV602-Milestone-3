@@ -90,7 +90,6 @@ class DES_View(Window_View):
     def get_selected_chart(self):
         # Check if user selected a chart
         if self.window['-CHART_LIST-'] in self.chart_dict:
-            print("returning", self.chart_dict['-CHART_LIST-'] in self.chart_dict)
             return self.chart_dict['-CHART_LIST-'].get() in self.chart_dict
         # If not, set to default
         return self.chart_dict['Line Plot']
@@ -118,14 +117,16 @@ class DES_View(Window_View):
         
         # Set details
         if info != None:
-            self.window['-TITLE-'].update(info['title'])
+            title = info['title']
+            self.window['-TITLE-'].update(title)
             self.window['-DESCRIPTION-'].update(info['description'])
         else:
-            self.window['-TITLE-'].update('No Data Set')
+            title = "No Data Set"
+            self.window['-TITLE-'].update(title)
             self.window['-DESCRIPTION-'].update('No Data Set')
 
         # Set title
-        self.chart_draw_handler(data, func, info['title'], config)
+        self.chart_draw_handler(data, func, title, config)
 
 
     def chart_draw_handler(self, data, func, title, config):
@@ -137,15 +138,19 @@ class DES_View(Window_View):
         """
         # Setup kwargs dict
         kwargs = {}
-        list_values = list(data.values())
-        kwargs['x_values'] = list_values[0]
-        for i in range(1, len(data)):
-            kwargs[f'y_values_{i}'] = list(data.values())[i]
-        kwargs['title_label'] = title
-        kwargs['x_label'] = list(data.keys())[0]
-        kwargs['y_label'] = list(data.keys())[1]
-        kwargs['zoom'] = config['zoom']
-        kwargs['pan'] = config['pan']
+        if not(data == {'': []} or data == None):
+            list_values = list(data.values())
+            kwargs['x_values'] = list_values[0]
+            for i in range(1, len(data)):
+                kwargs[f'y_values_{i}'] = list(data.values())[i]
+        if not(data == None or list(data.keys()) == ['']):
+            kwargs['x_label'] = list(data.keys())[0]
+            kwargs['y_label'] = list(data.keys())[1]
+        if title != None:
+            kwargs['title_label'] = title
+        if config != None:
+            kwargs['zoom'] = config['zoom']
+            kwargs['pan'] = config['pan']
 
         # Get chart
         figure = func(**kwargs)
