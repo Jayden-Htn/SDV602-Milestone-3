@@ -106,18 +106,21 @@ class Data_Manager():
         csv_file_obj.write('')
         self.close_file(csv_file_obj)
         # Clear info data
-        csv_file_obj = self.find_file(file_path+'des.csv', 'r+')
         try:
-            lines = csv_file_obj.readlines()
+            with open(f'{file_path}des.csv', 'r') as csv_file_obj:
+                csv_file_obj = self.find_file(file_path+'des.csv', 'r+')
+                lines = csv_file_obj.readlines()
             for i in range(len(lines)):
                 this_line = lines[i].strip().split(',')
-                # If the user's name is found, update the chart info
+                print(this_line)
+                # If the user's name is found, delete row
                 if this_line[0] == user:
-                    lines[i] = user + ',' + '' + ',' + '' + '\n'
+                    del lines[i]
                     break
             # Write the updated lines to the csv file
-            csv_file_obj.seek(0)
-            csv_file_obj.writelines(lines)
+            with open(f'{file_path}des.csv', 'w') as csv_file_obj:
+                csv_file_obj.seek(0)
+                csv_file_obj.writelines(lines)
         except:
             print("Unexpected error:", sys.exc_info()[0])
         # Update remote info
@@ -303,18 +306,16 @@ class Data_Manager():
         # Read each line of the csv file
         try:
             lines = csv_file_obj.readlines()
+            self.close_file(csv_file_obj)
             for i in range(len(lines)):
                 this_line = lines[i].strip().split(',')
                 # If the user's name is found, update the chart info
                 if this_line[0] == user:
-                    lines[i] = user + ',' + title + ',' + description + '\n'
-                    found = True
-                    break
-            # Write the updated lines to the csv file
-            csv_file_obj.seek(0)
-            csv_file_obj.writelines(lines)
-            # If the user's name was not found, add a new line to end
-            if not found:
+                    del lines[i]
+            # Write new info to csv file
+            with open(f'{file_path}des.csv', 'w') as csv_file_obj:
+                csv_file_obj.seek(0)
+                csv_file_obj.writelines(lines)
                 csv_file_obj.write(user + ',' + title + ',' + description + '\n')
         except:
             print("Unexpected error:", sys.exc_info()[0])
