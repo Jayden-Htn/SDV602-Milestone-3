@@ -20,11 +20,11 @@ def line_plot(**kwargs):
     Args 
           **kwargs lets you pass arguments into this function 
     """
-    x_label = 'Day'
-    y_label = 'Temperature in Celsius'
-    title_label = 'Temperature Graph'
-    x_values = range(1, 9)
-    y_values = [25.6, 24.1, 26.7, 28.3, 27.5, 30.5, 32.8, 33.1]
+    x_label = ''
+    y_label = ''
+    title_label = 'No title'
+    x_values = []
+    y_values = []
     zoom = 0
     pan = 1
 
