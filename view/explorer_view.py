@@ -9,7 +9,7 @@ sys.dont_write_bytecode = True
 import matplotlib
 matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
-from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg,  NavigationToolbar2Tk
 import datetime
 
 from view.window_view import Window_View
@@ -109,11 +109,6 @@ class DES_View(Window_View):
         if data_manager.get_data(self.owner):
             data = data_manager.dict_list
             info = data_manager.get_chart_info(self.owner) # Title, description, etc.
-
-        # Set any chart config settings
-        config = {}
-        config['zoom'] = (-(self.window['-ZOOM-'].TKScale.get()/10)+1)
-        config['pan'] = self.window['-PAN-'].TKScale.get()
         
         # Set details
         if info != None:
@@ -126,10 +121,10 @@ class DES_View(Window_View):
             self.window['-DESCRIPTION-'].update('No Data Set')
 
         # Set title
-        self.chart_draw_handler(data, func, title, config)
+        self.chart_draw_handler(data, func, title)
 
 
-    def chart_draw_handler(self, data, func, title, config):
+    def chart_draw_handler(self, data, func, title):
         """
         Handles the drawing of new charts on the canvas.
 
@@ -148,9 +143,6 @@ class DES_View(Window_View):
             kwargs['y_label'] = list(data.keys())[1]
         if title != None:
             kwargs['title_label'] = title
-        if config != None:
-            kwargs['zoom'] = config['zoom']
-            kwargs['pan'] = config['pan']
 
         # Get chart
         figure = func(**kwargs)
@@ -165,6 +157,10 @@ class DES_View(Window_View):
     def draw_figure(self, canvas, figure):
         chart_canvas_agg = FigureCanvasTkAgg(figure, canvas)
         chart_canvas_agg.draw()
+        # Add toolbar to canvas
+        toolbar = NavigationToolbar2Tk(
+            chart_canvas_agg, self.window['-CANVAS TOOLS-'].TKCanvas)
+        toolbar.update()
         chart_canvas_agg.get_tk_widget().pack(side='top', fill='both', expand=1)
         return chart_canvas_agg
 
