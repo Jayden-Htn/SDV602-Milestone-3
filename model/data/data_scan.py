@@ -1,10 +1,13 @@
 """
-Scans a csv file redirected or from the file object passed into the script
- "--header" indicates the first row is a header row
+This module contains the Data_Manager class for the data feature.
+
+Classes:
+    Data_Manager: This class handles the data for the DES.
 """
 import sys as sys
 from typing import Dict
 import csv
+import json
 
 from model.network.jsn_drop_service import jsnDrop
 
@@ -15,6 +18,24 @@ file_path = './database/des_data/'
 class Data_Manager():
     """
     This class handles the data for the DES.
+
+    Init:
+        jsn_tok (str): The JsnDrop token.
+        jsn_url (str): The JsnDrop URL.
+
+    Functions:
+        find_file(path_to_file, mode='r'): Gets a file object for the path_to_file, handling any errors.
+        close_file(file_object): Closes the file object.
+        scan(has_header=False, csv_file=sys.stdin): Scans a csv and returns the row values in dictionary and list structures.
+        clear_data(user): Clears the data for a user.
+        write_csv(values_dict): Writes a csv file from a dictionary. Will overwrite any existing file.
+        update_remote_data(user, column, data): Updates the remote data for a des.
+        merge_data(new_file, user_name): Merges the data from a new file with the existing data.
+        update_des_file(user): Updates the local csv file from the remote server.
+        get_data(user): Top-level function for des data retrieval. Updates local files from remote server. 
+            Find the user's matching csv file and scan the data on it, storing the results in the Data_Manager class.
+        get_chart_info(user): Gets the chart title and description from the csv file.
+        update_des_info(user, title, description): Updates the chart title and description in the csv file.
     """
     jsn_tok = "14419e82-082e-4ae7-a128-ef0118e9d483"
 
@@ -25,7 +46,7 @@ class Data_Manager():
         self.jsnDrop = jsnDrop(self.jsn_tok,"https://newsimland.com/~todd/JSON")
         # Schema for tables, will not wipe existing data
         # self.jsnDrop.drop('tblData') # Optional clear tables
-        result = self.jsnDrop.create("tblData", {"ID PK auto": 'xxxxxxxxxx',
+        result = self.jsnDrop.create("tblData", {"DataId PK": 'xxxxxxxxxx',
                                                 "DESName": "A_LOOONG_DES_Name"+('X'*50),
                                                 "ColumnName": "A_LOOONG_Col_Name"+('X'*50),
                                                 "DataValue": "A_LOONG_Data_Value"+('X'*255),
@@ -137,6 +158,7 @@ class Data_Manager():
         Returns:
             str: The csv file as a string.
         """
+        print("enter")
         csv_str = ''
         # Write the header row
         for header in list(values_dict.keys()):
@@ -147,6 +169,7 @@ class Data_Manager():
             for header in list(values_dict.keys()):
                 csv_str += values_dict[header][i] + ','
             csv_str += '\n'
+        print("exit")
         return csv_str
     
 
@@ -173,6 +196,10 @@ class Data_Manager():
         with open(f'{new_file}', 'r') as csv_file:
             new_data = self.scan(has_header=True, csv_file=csv_file)
             # Know file must exists as found in browser
+        
+        # Send to remote
+        for column in list(new_data.keys()):
+            self.update_remote_data(user_name, column, new_data[column])
 
         # Get existing user file
         existing_file_obj = self.find_file(file_path+user_name+'.csv', 'r') # a+ doesn't work, must be r to get data first
@@ -232,6 +259,16 @@ class Data_Manager():
             result = self.jsnDrop.jsnStatus
         else:
             result = api_result
+            # Build into dictionary based on column name
+            values_dict = {}
+            for row in result:
+                for key in row:
+                    if key == 'ColumnName':
+                        if row[key] not in values_dict:
+                            values_dict[row[key]] = []
+                        if key == 'DataValue':
+                            values_dict[row['ColumnName']].append(row[key])
+
             # Write the file to local storage
             try:
                 self.current_file.write(self.write_csv(result))
@@ -239,7 +276,6 @@ class Data_Manager():
                 print("Unexpected error:", sys.exc_info()[0])
                 return False
             self.close_file(csv_file_obj)
-        return True
 
 
     def get_data(self, user):
@@ -253,16 +289,22 @@ class Data_Manager():
         Returns:
             bool: True if the data was retrieved successfully, False otherwise.
         """
-        # Update local file from remote server
-        self.update_des_file(user)
         # Get file object
         csv_file_obj = self.find_file(file_path+user+'.csv')
         # Handle error
         if 'File Error' in self.status:
-            return False
-        # If file object is valid, scan the file
-        self.dict_list = self.scan(has_header=True, csv_file=csv_file_obj)
-        self.close_file(csv_file_obj)
+            if self.status['File Error'][0][0] != 'File not found error':
+                return False
+            # If file dosn't exist, create new file in local storage
+            with open(f'{file_path}{user}.csv', 'w') as new_csv:
+                new_csv.write('')
+        else:
+            self.close_file(csv_file_obj)
+        # Update local file from remote server
+        self.update_des_file(user)
+        # Scan the file
+        with open(f'{file_path}{user}.csv', 'r') as csv_file_obj:
+            self.dict_list = self.scan(has_header=True, csv_file=csv_file_obj)
         return True
 
 
@@ -322,6 +364,35 @@ class Data_Manager():
             return False
         self.close_file(csv_file_obj)
         return True
+
+
+    def url_to_csv(self, file_path, owner):
+        try:
+            with open(file_path, 'r') as csv_file:
+                api_data = self.scan(has_header=True, csv_file=csv_file)
+            # Data is stored in the key, very odd formatting
+            data = list(api_data.keys())[7:-22] # Filter out the keys that are not data
+            # Format to match with the local data
+            new_data = {}
+            for item in data:
+                item_list = item.split(":")
+                key = item_list[0].strip().replace('"', '')
+                value = item_list[1].strip().replace('"', '').replace('{', '').replace('}', '')
+                if key not in new_data:
+                    new_data[key] = []
+                new_data[key].append(value)
+            del new_data['records']
+            # Overwrite downloading.csv
+            # with open('./database/downloading.csv', 'w') as csv_file:
+            #     csv_file.write(self.write_csv(new_data))
+            # self.merge_data(file_path, owner)
+            print("--- WARNING ---")
+            print("The url_to_csv function is working yet.")
+            print("Processed data:", new_data)
+        except:
+            print("Unexpected error:", sys.exc_info()[0], "in url_to_csv")
+            return False
+
 
 
 if __name__ == "__main__":
