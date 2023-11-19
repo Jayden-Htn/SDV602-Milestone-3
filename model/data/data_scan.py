@@ -6,8 +6,6 @@ Classes:
 """
 import sys as sys
 from typing import Dict
-import csv
-import json
 
 from model.network.jsn_drop_service import jsnDrop
 
@@ -20,22 +18,24 @@ class Data_Manager():
     This class handles the data for the DES.
 
     Init:
-        jsn_tok (str): The JsnDrop token.
-        jsn_url (str): The JsnDrop URL.
+        status (dict): The status of the data manager.
+        current_file (file object): The current file object.
+        dict_list (list): The list of dictionaries of the data.
+        jsnDrop (jsnDrop): The jsnDrop object.
 
     Functions:
         find_file(path_to_file, mode='r'): Gets a file object for the path_to_file, handling any errors.
-        close_file(file_object): Closes the file object.
+        close_file(file_object): Closes a file object.
         scan(has_header=False, csv_file=sys.stdin): Scans a csv and returns the row values in dictionary and list structures.
         clear_data(user): Clears the data for a user.
         write_csv(values_dict): Writes a csv file from a dictionary. Will overwrite any existing file.
         update_remote_data(user, column, data): Updates the remote data for a des.
-        merge_data(new_file, user_name): Merges the data from a new file with the existing data.
+        merge_data(new_file, user_name): Merges new data into the existing data for a user.
         update_des_file(user): Updates the local csv file from the remote server.
         get_data(user): Top-level function for des data retrieval. Updates local files from remote server. 
-            Find the user's matching csv file and scan the data on it, storing the results in the Data_Manager class.
         get_chart_info(user): Gets the chart title and description from the csv file.
         update_des_info(user, title, description): Updates the chart title and description in the csv file.
+        url_to_csv(file_path, owner): Converts a url to a csv file.
     """
     jsn_tok = "14419e82-082e-4ae7-a128-ef0118e9d483"
 
@@ -59,6 +59,7 @@ class Data_Manager():
 
         Args:
             path_to_file (str): The path to the file.
+            mode (str, optional): The mode to open the file in. Defaults to 'r'.
 
         Returns:
             file object: The file object or None if an error occurred.
@@ -108,7 +109,7 @@ class Data_Manager():
                 for col, header in zip(this_line, list(values_dict.keys())):
                     values_dict[header].append(col)
         except:
-            print("Unexpected error:", sys.exc_info()[0])
+            print("Unexpected error:", sys.exc_info()[0], "in scan")
             return None
         return values_dict
     
@@ -143,7 +144,7 @@ class Data_Manager():
                 csv_file_obj.seek(0)
                 csv_file_obj.writelines(lines)
         except:
-            print("Unexpected error:", sys.exc_info()[0])
+            print("Unexpected error:", sys.exc_info()[0], "in clear_data")
         # Update remote info
         # self.update_des_info(user, '', '')
     
@@ -158,7 +159,6 @@ class Data_Manager():
         Returns:
             str: The csv file as a string.
         """
-        print("enter")
         csv_str = ''
         # Write the header row
         for header in list(values_dict.keys()):
@@ -169,7 +169,6 @@ class Data_Manager():
             for header in list(values_dict.keys()):
                 csv_str += values_dict[header][i] + ','
             csv_str += '\n'
-        print("exit")
         return csv_str
     
 
@@ -189,6 +188,13 @@ class Data_Manager():
 
 
     def merge_data(self, new_file, user_name):
+        """
+        Merges new data into the existing data for a user.
+
+        Parameters:
+            new_file (str): The path to the new file.
+            user_name (str): The user's name.
+        """
         # Note: The use of reading and writing could definitely be optimised more, 
         # # but this is a quick solution for now due to time constraints
 
@@ -273,7 +279,7 @@ class Data_Manager():
             try:
                 self.current_file.write(self.write_csv(result))
             except:
-                print("Unexpected error:", sys.exc_info()[0])
+                # print("Unexpected error:", sys.exc_info()[0], "in update_des_file")
                 return False
             self.close_file(csv_file_obj)
 
@@ -311,6 +317,12 @@ class Data_Manager():
     def get_chart_info(self, user):
         """
         Gets the chart title and description from the csv file.
+
+        Parameters:
+            user (str): The user's name.
+
+        Returns:
+            dict: The chart info (e.g. {'title': 'My Chart', 'description': 'This is my chart'}) or None if not found.
         """
         csv_file_obj = self.find_file(file_path+'des.csv')
         # Handle error
@@ -325,7 +337,7 @@ class Data_Manager():
                     self.close_file(csv_file_obj)
                     return {'title': this_line[1], 'description': this_line[2]}
         except:
-            print("Unexpected error:", sys.exc_info()[0])
+            print("Unexpected error:", sys.exc_info()[0], "in get_chart_info")
             return None
         self.close_file(csv_file_obj)
         return None
@@ -339,6 +351,9 @@ class Data_Manager():
             user (str): The user's name.
             title (str): The chart title.
             description (str): The chart description.
+
+        Returns:
+            bool: True if the chart info was updated successfully, False otherwise.
         """
         found = False
         csv_file_obj = self.find_file(file_path+'des.csv', 'r+')
@@ -360,13 +375,20 @@ class Data_Manager():
                 csv_file_obj.writelines(lines)
                 csv_file_obj.write(user + ',' + title + ',' + description + '\n')
         except:
-            print("Unexpected error:", sys.exc_info()[0])
+            print("Unexpected error:", sys.exc_info()[0], "in update_des_info")
             return False
         self.close_file(csv_file_obj)
         return True
 
 
     def url_to_csv(self, file_path, owner):
+        """
+        Converts a url to a csv file.
+
+        Parameters:
+            file_path (str): The path to the file.
+            owner (str): The owner of the file.
+        """
         try:
             with open(file_path, 'r') as csv_file:
                 api_data = self.scan(has_header=True, csv_file=csv_file)
@@ -391,7 +413,6 @@ class Data_Manager():
             print("Processed data:", new_data)
         except:
             print("Unexpected error:", sys.exc_info()[0], "in url_to_csv")
-            return False
 
 
 

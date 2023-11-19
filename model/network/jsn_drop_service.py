@@ -1,5 +1,8 @@
 """
 This module provides a wrapper for the JsnDrop API.
+
+Classes:
+    jsnDrop: This class provides a wrapper for the JsnDrop API.
 """
 
 
@@ -72,6 +75,13 @@ class jsnDrop(object):
     def create(self, table_name, example):
         """
         This function creates a table.
+
+        Parameters:
+            table_name (str): The name of the table to create.
+            example (dict): The example of the table to create.
+
+        Returns:
+            dict: The result of the command.
         """
         command = self.jsnDropCreate
         command["CREATE"] = table_name
@@ -82,6 +92,13 @@ class jsnDrop(object):
     def store(self, table_name, value_list):
         """
         This function stores values in a table.
+
+        Parameters:
+            table_name (str): The name of the table to store values in.
+            value_list (list): The values to store in the table.
+
+        Returns:
+            dict: The result of the command.
         """
         command = self.jsnDropStore
         command["STORE"] = table_name
@@ -92,6 +109,12 @@ class jsnDrop(object):
     def all(self, table_name):
         """
         This function gets all the values in a table.
+
+        Parameters:
+            table_name (str): The name of the table to get all the values from.
+
+        Returns:
+            dict: The result of the command.
         """
         command = self.jsnDropAll
         command["ALL"] = table_name
@@ -101,6 +124,13 @@ class jsnDrop(object):
     def select(self, table_name, where):
         """
         This function gets values from a table where a condition is met.
+
+        Parameters:
+            table_name (str): The name of the table to get values from.
+            where (str): The condition to meet.
+
+        Returns:
+            dict: The result of the command.
         """
         command = self.jsnDropSelect
         command["SELECT"] = table_name
@@ -111,6 +141,13 @@ class jsnDrop(object):
     def delete(self, table_name, where):
         """
         This function deletes values from a table where a condition is met.
+
+        Parameters:
+            table_name (str): The name of the table to delete values from.
+            where (str): The condition to meet.
+
+        Returns:
+            dict: The result of the command.
         """
         command = self.jsnDropDelete
         command["DELETE"] = table_name
@@ -121,6 +158,12 @@ class jsnDrop(object):
     def drop(self, table_name):
         """
         This function drops (deletes) a table.
+
+        Parameters:
+            table_name (str): The name of the table to drop.
+
+        Returns:
+            dict: The result of the command.
         """
         command = self.jsnDropDrop
         command["DROP"] = table_name

@@ -1,5 +1,8 @@
 """
 This module contains the Window_View superclass for the PySimpleGUI window.
+
+Classes:
+    Window_View: The superclass for the PySimpleGUI window.
 """
 
 
@@ -11,6 +14,14 @@ import PySimpleGUI as sg
 
 # Procedures
 class Window_View():
+    """
+    The superclass for the PySimpleGUI window.
+
+    Functions:
+        set_theme(): Sets the default PySimpleGUI theme for the program.
+        render(): Renders the window.
+        accept_input(): Accepts input from the window.
+    """
     user = None
     view_list = []
     def __init__(self):
@@ -39,6 +50,9 @@ class Window_View():
 
 
     def render(self):
+        """
+        This function renders the window.
+        """
         # create the form and show it without the plot
         if self.current_layout != [] :
             self.window = sg.Window('Data Scout: Data Set Explorer', self.current_layout, size=(1000, 600), finalize=True)
@@ -46,6 +60,9 @@ class Window_View():
 
     # class static method, level reading
     def accept_input():
+        """
+        This function accepts input from the window.
+        """
         keep_going = True  
         active_view = None     
         while keep_going:

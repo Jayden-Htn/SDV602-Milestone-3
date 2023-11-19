@@ -1,5 +1,8 @@
 """
 This file contains the view for the data explorer screen, sets up the layout and creates the window controls.
+
+Classes:
+    DES_View: The view for the data explorer screen.
 """
 
 
@@ -21,6 +24,23 @@ from model.chat_manager import Chat_Manager
 
 # Procedures
 class DES_View(Window_View):
+    """
+    The view for the data explorer screen.
+
+    Init:
+        name (str): The name of the DES owner.
+
+    Functions:
+        set_layout(): Sets the layout for the DES screen.
+        set_data(): Sets the data for the DES screen.
+        set_chat(): Sets the chat for the DES screen.
+        disable_owner_controls(): Disables the owner controls (e.g. data and detail setting).
+        get_selected_chart(): Gets the selected chart.
+        prepare_chart_data(): Prepares the chart data for drawing and sets the chart details on the DES screen.
+        chart_draw_handler(): Handles the drawing of new charts on the canvas.
+        draw_figure(): Draws the chart on the canvas.
+        delete_chart_agg(): Deletes the chart from the canvas.
+    """
     def __init__(self, name):
         super().__init__()
         self.owner = name
@@ -40,6 +60,9 @@ class DES_View(Window_View):
 
 
     def set_data(self):
+        """
+        Sets the data for the DES screen.
+        """
         # Set owner
         self.window['-USER-'].update(f'Managed by {self.owner}')
 
@@ -59,6 +82,9 @@ class DES_View(Window_View):
 
 
     def set_chat(self):
+        """
+        Sets the chat for the DES screen.
+        """
         # Send chat component to chat manager
         self.chat_manager.set_chat_component(self.window['-CHAT-'])
 
@@ -129,7 +155,9 @@ class DES_View(Window_View):
         Handles the drawing of new charts on the canvas.
 
         Parameters
-            values (dict): The values from the window.
+            data (dict): The chart data.
+            func (function): The chart function.
+            title (str): The chart title.
         """
         # Setup kwargs dict
         kwargs = {}
@@ -155,6 +183,16 @@ class DES_View(Window_View):
 
 
     def draw_figure(self, canvas, figure):
+        """
+        Draws the chart on the canvas.
+
+        Parameters:
+            canvas (tk.Canvas): The canvas to draw the chart on.
+            figure (matplotlib.figure): The figure to draw.
+
+        Returns:
+            chart_canvas_agg (FigureCanvasTkAgg): The chart canvas.
+        """
         chart_canvas_agg = FigureCanvasTkAgg(figure, canvas)
         chart_canvas_agg.draw()
         # Add toolbar to canvas
