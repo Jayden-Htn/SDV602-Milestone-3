@@ -9,6 +9,8 @@ Classes:
 # Imports
 from model.network.jsn_drop_service import jsnDrop
 from datetime import datetime
+from threading import Thread
+from time import sleep
 
 
 class Chat_Manager(object):
@@ -51,6 +53,9 @@ class Chat_Manager(object):
         self.current_user = active_user
         self.current_des = des_name
         self.chat_component = None
+        self.thread = Thread(target=self.thread_updater)
+        self.run_thread = True
+        self.thread.start()
 
         self.jsnDrop = jsnDrop(Chat_Manager.jsn_tok,"https://newsimland.com/~todd/JSON")
 
@@ -130,5 +135,20 @@ class Chat_Manager(object):
         self.send_chat("How are you?")
         self.send_chat("I'm fine")
         self.send_chat("Goodbye")
-    
 
+
+    def thread_updater(self):
+        """
+        This function updates the chat component with new messages every second.
+        """
+        while self.run_thread:
+            # Update chat
+            self.get_chat()
+            sleep(1)
+
+
+    def stop(self):
+        """
+        Stops the thread.
+        """
+        self.run_thread = False
