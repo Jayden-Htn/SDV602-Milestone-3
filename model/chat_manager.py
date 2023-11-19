@@ -55,19 +55,19 @@ class Chat_Manager(object):
         self.chat_component = None
         self.thread = Thread(target=self.thread_updater)
         self.run_thread = True
-        self.thread.start()
 
         self.jsnDrop = jsnDrop(Chat_Manager.jsn_tok,"https://newsimland.com/~todd/JSON")
 
         # Optional clear tables
         # self.jsnDrop.drop('tblChat')
-
+        
         # Schema for tables, will not wipe existing data
         result = self.jsnDrop.create("tblChat", {"Time PK": self.now_time_stamp(),
                                                 "UserName": "A_LOOONG_NAME"+('X'*50),
                                                 "DESName": "A_LOOONG_DES_Name"+('X'*50),
                                                 "Message": "A_LOONG____CHAT_ENTRY"+('X'*255)
                                                 })
+        self.thread.start()
 
 
     def send_chat(self, message):
