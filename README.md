@@ -2,7 +2,7 @@
 
 Python data set explorer for NMIT SDV602 milestone 3 2023. This program is based of the work done for milestone 2.
 
-Please read this document before setting up and using the program. 
+<b>Please read this document before setting up and using the program, it includes information about functionality.</b>
 
 
 ## Installation
@@ -16,10 +16,22 @@ How to run the game:
 5. Run the main.py script.
 
 
-## Dependancies
+## Testing
 
-- Python V3.11.4
-- PySimpleGUI V4.60.5
+I have included in the database folder, another file named 'sample_data'. This folder includes various csv files for adding and merging into DES screens. Some include addition columns or missing columns to demonstrate the error handling. You may use these to test the data setting functionality.
+
+
+# Functionality
+
+- Note: the majority of my testing has been doen under the account "Sam" (sam@email.com, sam123). This includes provided sample data for testing and an existing remote database already set up.
+- Warning: when slecting a data source, the remote repository is updated. This can take around 30 seconds, however it does work.
+- Warning: the GUI can be a little slow to respond at times.
+- Warning: I have not been able to added user mangement to the remote database due to time constraints, however this is not in the ruberic.
+- Warning: URL to csv is not functioning. The program will take the URL, retrieve the data and runs into an error midway through processing it, before merging it into the existing data. Inputting the following or similar url will work though the process up until the point of failure, and display the data processed at that point.
+Warning: URL csv handling is based off the format from the data.govt.nz api. This will likely not work with other URLs. The URL query I have been testing with is `https://catalogue.data.govt.nz/api/3/action/datastore_search?resource_id=6c983bed-8346-4598-8513-9d69573f5318`.
+
+
+## Dependancies
 
 These can be installed by running the command `pip install -r requirements.txt` in the terminal.
 
