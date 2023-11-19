@@ -31,6 +31,11 @@ I have included in the database folder, another file named 'sample_data'. This f
 Warning: URL csv handling is based off the format from the data.govt.nz api. This will likely not work with other URLs. The URL query I have been testing with is `https://catalogue.data.govt.nz/api/3/action/datastore_search?resource_id=6c983bed-8346-4598-8513-9d69573f5318`.
 
 
+## Milestone 2
+
+Some of the documents from Milestone 2 have been included. If anything is missed, the repository can be found at: https://github.com/Jayden-Htn/SDV602-Milestone-2.
+
+
 ## Dependancies
 
 These can be installed by running the command `pip install -r requirements.txt` in the terminal.
