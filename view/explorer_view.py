@@ -14,6 +14,7 @@ matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg,  NavigationToolbar2Tk
 import datetime
+import time
 
 from view.window_view import Window_View
 from view.layouts.layout_des import layout as layout_des
@@ -48,11 +49,12 @@ class DES_View(Window_View):
         self.chat_manager = Chat_Manager(self.user, self.owner)
         self.chart_agg = None
         self.last_chart = None
-        self.chart_dict = {'Line Plot': (charts.line_plot), 'Plot Dots (discrete plot)': (charts.discrete_plot),
-                         'Name and Label': (charts.names_labels), 'Plot many Lines': (charts.multiple_plots),
-                         'Bar Chart': (charts.bar_chart), 'Histogram': (charts.histogram),
-                         'Scatter Plots': (charts.scatter_plots), 'Stack Plot': (charts.stack_plot),
-                         'Pie Chart 1': (charts.pie_chart1), 'Pie Chart 2': (charts.pie_chart2)}
+        self.chart_dict = {'Line Plot': (charts.line_plot)}
+        # {'Line Plot': (charts.line_plot), 'Plot Dots (discrete plot)': (charts.discrete_plot),
+        #                  'Name and Label': (charts.names_labels), 'Plot many Lines': (charts.multiple_plots),
+        #                  'Bar Chart': (charts.bar_chart), 'Histogram': (charts.histogram),
+        #                  'Scatter Plots': (charts.scatter_plots), 'Stack Plot': (charts.stack_plot),
+        #                  'Pie Chart 1': (charts.pie_chart1), 'Pie Chart 2': (charts.pie_chart2)}
 
 
     def set_layout(self):

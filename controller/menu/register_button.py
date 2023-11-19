@@ -17,7 +17,7 @@ def accept(event, values, instance):
             # Add account
             accounts.add_account(values['-NAME-'], values['-EMAIL_2-'], values['-PASSWORD_2-'])
             # Add current user
-            view.Menu_View.user = values['-NAME-']
+            view.Menu_View.set_user(accounts.get_display_name(values['-EMAIL_2-']))
             # Switch screen
             instance.window['-COL_REGISTER-'].update(visible=False)
             instance.window['-COL_HOME-'].update(visible=True)
